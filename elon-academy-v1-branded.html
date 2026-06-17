@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elon Academy — College Access &amp; Success</title>
+<style>
+  /* ============================================
+     Elon Academy — Version 1: Elon-Branded Modern
+     Colors: Elon maroon (#73000A) + gold (#B59A57)
+     ============================================ */
+  :root {
+    --maroon: #73000A;
+    --maroon-dark: #4d0007;
+    --gold: #B59A57;
+    --gold-light: #e8ddc0;
+    --ink: #222;
+    --paper: #faf8f4;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: var(--ink); background: var(--paper); line-height: 1.6; }
+
+  /* ---- Nav ---- */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--maroon); color: #fff;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.8rem 6vw;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  }
+  nav .brand { font-weight: 700; font-size: 1.15rem; letter-spacing: 0.5px; }
+  nav .brand span { color: var(--gold); }
+  nav ul { display: flex; gap: 1.8rem; list-style: none; }
+  nav a { color: #fff; text-decoration: none; font-size: 0.95rem; opacity: 0.9; transition: opacity .2s; }
+  nav a:hover { opacity: 1; color: var(--gold); }
+  nav .cta {
+    background: var(--gold); color: var(--maroon-dark);
+    padding: 0.45rem 1.1rem; border-radius: 999px; font-weight: 600;
+  }
+  nav .cta:hover { color: var(--maroon-dark); filter: brightness(1.08); }
+
+  /* ---- Hero ---- */
+  header {
+    background: linear-gradient(135deg, var(--maroon-dark) 0%, var(--maroon) 55%, #8f1a26 100%);
+    color: #fff; text-align: center;
+    padding: 7rem 6vw 6rem;
+    position: relative; overflow: hidden;
+  }
+  header::after {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(181,154,87,0.18) 0, transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(181,154,87,0.12) 0, transparent 45%);
+    pointer-events: none;
+  }
+  header .eyebrow {
+    display: inline-block; border: 1px solid var(--gold); color: var(--gold);
+    border-radius: 999px; padding: 0.3rem 1rem; font-size: 0.8rem;
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1.5rem;
+  }
+  header h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: 1.15; margin-bottom: 1.2rem; }
+  header h1 em { font-style: normal; color: var(--gold); }
+  header p.lede { max-width: 680px; margin: 0 auto 2.2rem; font-size: 1.15rem; opacity: 0.92; }
+  .btn-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
+  .btn {
+    text-decoration: none; font-weight: 600; border-radius: 999px;
+    padding: 0.8rem 1.8rem; transition: transform .15s, box-shadow .15s;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.3); }
+  .btn.primary { background: var(--gold); color: var(--maroon-dark); }
+  .btn.ghost { border: 2px solid #fff; color: #fff; }
+
+  /* ---- Stats band ---- */
+  .stats {
+    background: #fff; display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1px; background-color: #eee;
+    border-bottom: 4px solid var(--gold);
+  }
+  .stat { background: #fff; text-align: center; padding: 2.5rem 1rem; }
+  .stat .num { font-size: 2.6rem; font-weight: 800; color: var(--maroon); }
+  .stat .label { font-size: 0.9rem; color: #666; margin-top: 0.3rem; }
+
+  /* ---- Sections ---- */
+  section { padding: 5rem 6vw; max-width: 1200px; margin: 0 auto; }
+  .section-title { font-size: 2.1rem; color: var(--maroon); margin-bottom: 0.6rem; }
+  .section-sub { color: #666; max-width: 640px; margin-bottom: 3rem; }
+  .gold-bar { width: 64px; height: 4px; background: var(--gold); border-radius: 2px; margin-bottom: 1.2rem; }
+
+  /* ---- Program cards ---- */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+  .card {
+    background: #fff; border-radius: 14px; padding: 2rem 1.6rem;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.07);
+    border-top: 4px solid var(--gold);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .card:hover { transform: translateY(-6px); box-shadow: 0 10px 26px rgba(115,0,10,0.15); }
+  .card .icon {
+    width: 52px; height: 52px; border-radius: 12px;
+    background: var(--maroon); color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; margin-bottom: 1.1rem;
+  }
+  .card h3 { color: var(--maroon); margin-bottom: 0.5rem; }
+  .card p { font-size: 0.95rem; color: #555; }
+
+  /* ---- Journey timeline ---- */
+  .timeline { position: relative; margin-left: 1rem; }
+  .timeline::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--gold);
+  }
+  .step { position: relative; padding: 0 0 2.2rem 2.2rem; }
+  .step::before {
+    content: ""; position: absolute; left: -8.5px; top: 4px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--maroon); border: 4px solid var(--gold);
+  }
+  .step h4 { color: var(--maroon); font-size: 1.1rem; }
+  .step p { color: #555; font-size: 0.95rem; }
+
+  /* ---- Support band ---- */
+  .support {
+    background: var(--maroon); color: #fff; text-align: center;
+    max-width: none; padding: 4.5rem 6vw;
+  }
+  .support h2 { font-size: 2rem; margin-bottom: 1rem; }
+  .support h2 span { color: var(--gold); }
+  .support p { max-width: 620px; margin: 0 auto 2rem; opacity: 0.92; }
+
+  /* ---- Contact / footer ---- */
+  footer { background: var(--maroon-dark); color: #ddd; padding: 3.5rem 6vw 2rem; }
+  .foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; max-width: 1100px; margin: 0 auto 2.5rem; }
+  footer h4 { color: var(--gold); margin-bottom: 0.8rem; }
+  footer a { color: #ddd; }
+  footer .fine { text-align: center; font-size: 0.85rem; opacity: 0.6; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 1.5rem; }
+
+  /* ---- Scroll reveal ---- */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 720px) { nav ul { display: none; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">ELON <span>ACADEMY</span></div>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#programs">Programs</a></li>
+    <li><a href="#journey">The Journey</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="cta" href="#support">Support Us</a>
+</nav>
+
+<header>
+  <div class="eyebrow">Center for Access &amp; Success</div>
+  <h1>Your path to college<br>starts <em>here</em>.</h1>
+  <p class="lede">An intensive, multi-year college access and success program for academically
+  promising high school students in Alamance County — at no cost to families.</p>
+  <div class="btn-row">
+    <a class="btn primary" href="#programs">Explore Programs</a>
+    <a class="btn ghost" href="#journey">See the Journey</a>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="stat reveal"><div class="num" data-target="176">0</div><div class="label">Scholars enrolled</div></div>
+  <div class="stat reveal"><div class="num" data-target="100">0</div><div class="label">% accepted to college</div></div>
+  <div class="stat reveal"><div class="num" data-target="79">0</div><div class="label">% earn a college degree</div></div>
+  <div class="stat reveal"><div class="num" data-target="5.2" data-decimal="1" data-prefix="$" data-suffix="M+">0</div><div class="label">Merit aid earned (Class of 2023)</div></div>
+</div>
+
+<section id="about" class="reveal">
+  <div class="gold-bar"></div>
+  <h2 class="section-title">What is the Elon Academy?</h2>
+  <p class="section-sub">Part of Elon University's Center for Access and Success, the Elon Academy
+  is a non-profit program serving students with financial need and/or no family history of college.
+  Scholars get three summer residential experiences on Elon's campus, year-round Saturday programs,
+  and support all the way through college graduation.</p>
+  <div class="cards">
+    <div class="card"><div class="icon">&#127979;</div><h3>Free to Families</h3><p>The Academy is not funded through tuition — it runs on the generosity of individuals, businesses, and foundations.</p></div>
+    <div class="card"><div class="icon">&#127891;</div><h3>Academically Promising</h3><p>Every high school scholar takes at least one honors or AP class, with an average unweighted GPA of 3.66.</p></div>
+    <div class="card"><div class="icon">&#129309;</div><h3>Whole-Family Support</h3><p>Families participate alongside scholars through Saturday programs and the Transitions to College program.</p></div>
+  </div>
+</section>
+
+<section id="programs" class="reveal">
+  <div class="gold-bar"></div>
+  <h2 class="section-title">Programs</h2>
+  <p class="section-sub">Five connected programs guide each scholar from sophomore year of high school through a college degree.</p>
+  <div class="cards">
+    <div class="card"><div class="icon">&#9728;&#65039;</div><h3>Summer Academy</h3><p>Three consecutive summers living and learning on Elon's campus before sophomore, junior, and senior years.</p></div>
+    <div class="card"><div class="icon">&#128197;</div><h3>Saturday Academy</h3><p>Year-round Saturday sessions for scholars and families — academics, college prep, and community.</p></div>
+    <div class="card"><div class="icon">&#128218;</div><h3>Academic Coaching</h3><p>One-on-one coaching that keeps scholars on track in their toughest courses.</p></div>
+    <div class="card"><div class="icon">&#129489;&#8205;&#127891;</div><h3>College Mentors</h3><p>Current college students mentor scholars through applications, essays, and big decisions.</p></div>
+    <div class="card"><div class="icon">&#128640;</div><h3>College Success</h3><p>Support continues after high school graduation — all the way to a college diploma.</p></div>
+  </div>
+</section>
+
+<section id="journey" class="reveal">
+  <div class="gold-bar"></div>
+  <h2 class="section-title">The Scholar Journey</h2>
+  <p class="section-sub">A multi-phase path that starts freshman year of high school and ends with a college degree.</p>
+  <div class="timeline">
+    <div class="step"><h4>Apply — Freshman Year</h4><p>Academically promising students in Alamance County apply and are selected as scholars.</p></div>
+    <div class="step"><h4>Three Summer Residencies</h4><p>Scholars live on Elon's campus each summer before sophomore, junior, and senior years.</p></div>
+    <div class="step"><h4>Year-Round Saturday Programs</h4><p>Scholars and families build skills and community throughout the school year.</p></div>
+    <div class="step"><h4>Transitions to College</h4><p>The summer after graduation, scholars and families prepare for the leap to campus life.</p></div>
+    <div class="step"><h4>College Success Program</h4><p>Continued support on their college campuses — 79% of scholars earn a college degree, versus 14% of low-income students nationally.</p></div>
+  </div>
+</section>
+
+<section id="support" class="support reveal">
+  <h2>The Academy runs on <span>generosity</span>.</h2>
+  <p>The Elon Academy is not funded through tuition dollars. Its future depends on individuals,
+  businesses, and foundations who believe every promising student deserves a shot at college.</p>
+  <a class="btn primary" href="https://www.elon.edu/academygift">Support the Elon Academy</a>
+</section>
+
+<footer id="contact">
+  <div class="foot-grid">
+    <div>
+      <h4>Contact</h4>
+      <p>elonacademy@elon.edu<br>(336) 278-6109</p>
+    </div>
+    <div>
+      <h4>Visit</h4>
+      <p>Mooney Building, Suite 302<br>Elon University<br>Elon, NC 27244</p>
+    </div>
+    <div>
+      <h4>Mail</h4>
+      <p>2108 Campus Box<br>Elon, NC 27244</p>
+    </div>
+  </div>
+  <div class="fine">Student demo project — based on the Elon Academy, Elon University Center for Access &amp; Success.</div>
+</footer>
+
+<script>
+  // Scroll-reveal: fade sections in as they enter the viewport
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        // animate stat counters once visible
+        e.target.querySelectorAll('.num[data-target]').forEach(animateCounter);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  function animateCounter(el) {
+    if (el.dataset.done) return;
+    el.dataset.done = "1";
+    const target = parseFloat(el.dataset.target);
+    const decimals = parseInt(el.dataset.decimal || "0");
+    const prefix = el.dataset.prefix || "";
+    const suffix = el.dataset.suffix || "";
+    const dur = 1400, start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = prefix + (target * eased).toFixed(decimals) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+</script>
+</body>
+</html>

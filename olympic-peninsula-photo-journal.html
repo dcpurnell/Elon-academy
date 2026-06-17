@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olympic Peninsula — A Photo Journal</title>
+<style>
+  /* ==================================================
+     Olympic Peninsula — Photo Journal demo
+     Design idea: the PHOTOS are the website.
+     Dark room, big images, day-by-day chapters,
+     click any photo for a full-screen lightbox.
+     Note: photos load from the web (SmugMug), so this
+     demo needs an internet connection.
+     ================================================== */
+  :root {
+    --bg: #111315;
+    --bg-soft: #1a1d20;
+    --text: #e9e7e2;
+    --muted: #9a978f;
+    --accent: #d4a24e;   /* golden-hour amber */
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+  }
+
+  /* ---- Hero: one full-screen photo ---- */
+  .hero {
+    height: 100vh; position: relative; overflow: hidden;
+    display: flex; align-items: flex-end;
+  }
+  .hero img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; animation: slowzoom 16s ease-out forwards;
+  }
+  @keyframes slowzoom { from { transform: scale(1.08); } to { transform: scale(1); } }
+  .hero .shade {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(17,19,21,0.95) 0%, rgba(17,19,21,0.25) 45%, rgba(17,19,21,0.15) 100%);
+  }
+  .hero .title {
+    position: relative; padding: 0 6vw 9vh; max-width: 900px;
+  }
+  .hero .trip-tag {
+    font-size: 0.8rem; letter-spacing: 3.5px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.6rem, 7vw, 5rem); font-weight: 800;
+    line-height: 1.05; letter-spacing: -1px;
+    text-shadow: 0 2px 24px rgba(0,0,0,0.6);
+  }
+  .hero p { color: #cfccc4; margin-top: 1rem; font-size: 1.1rem; max-width: 52ch; }
+  .hero .scroll-hint {
+    position: absolute; bottom: 2.2vh; left: 50%; transform: translateX(-50%);
+    color: var(--muted); font-size: 1.4rem; animation: bob 2s ease-in-out infinite;
+  }
+  @keyframes bob { 50% { transform: translate(-50%, 8px); } }
+
+  /* ---- Stats strip ---- */
+  .strip {
+    display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap;
+    padding: 2.5rem 6vw; background: var(--bg-soft);
+    border-top: 1px solid #2a2d31; border-bottom: 1px solid #2a2d31;
+  }
+  .strip div { text-align: center; }
+  .strip .n { font-size: 1.9rem; font-weight: 800; color: var(--accent); }
+  .strip .l { font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+
+  /* ---- Day chapters ---- */
+  .day { padding: 6rem 6vw 3rem; max-width: 1400px; margin: 0 auto; }
+  .day-head { display: flex; align-items: baseline; gap: 1.4rem; margin-bottom: 0.6rem; }
+  .day-head .num {
+    font-size: clamp(3rem, 6vw, 4.5rem); font-weight: 900;
+    color: transparent; -webkit-text-stroke: 1.5px var(--accent);
+    line-height: 1;
+  }
+  .day-head h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 700; }
+  .day-date { color: var(--muted); font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2.2rem; }
+
+  /* ---- Photo grid: first photo of each day is featured big ---- */
+  .grid {
+    display: grid; gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-auto-flow: dense;
+  }
+  .grid figure {
+    position: relative; overflow: hidden; border-radius: 10px;
+    cursor: zoom-in; background: var(--bg-soft);
+    aspect-ratio: 3 / 2;
+  }
+  .grid figure.feature { grid-column: span 2; grid-row: span 2; }
+  @media (max-width: 620px) { .grid figure.feature { grid-column: span 1; grid-row: span 1; } }
+  .grid img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform .5s ease, filter .5s ease;
+  }
+  .grid figure:hover img { transform: scale(1.05); filter: brightness(1.08); }
+  .grid figcaption {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 1.6rem 1rem 0.7rem; font-size: 0.8rem; color: #e9e7e2;
+    background: linear-gradient(to top, rgba(0,0,0,0.65), transparent);
+    opacity: 0; transition: opacity .3s;
+  }
+  .grid figure:hover figcaption { opacity: 1; }
+
+  /* ---- Lightbox ---- */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(10,11,12,0.96);
+    display: none; align-items: center; justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img {
+    max-width: 92vw; max-height: 86vh; border-radius: 6px;
+    box-shadow: 0 10px 60px rgba(0,0,0,0.8);
+  }
+  .lightbox .nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    color: #fff; font-size: 1.6rem; width: 54px; height: 54px; border-radius: 50%;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background .2s; user-select: none;
+  }
+  .lightbox .nav:hover { background: rgba(255,255,255,0.2); }
+  .lightbox .prev { left: 3vw; }
+  .lightbox .next { right: 3vw; }
+  .lightbox .close { position: absolute; top: 3vh; right: 3vw; top: 3vh; transform: none; }
+  .lightbox .counter {
+    position: absolute; bottom: 3vh; left: 50%; transform: translateX(-50%);
+    color: var(--muted); font-size: 0.85rem; letter-spacing: 2px;
+  }
+
+  /* ---- Outro ---- */
+  .outro {
+    text-align: center; padding: 7rem 6vw 6rem; max-width: 760px; margin: 0 auto;
+  }
+  .outro h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; margin-bottom: 1rem; }
+  .outro h2 span { color: var(--accent); }
+  .outro p { color: var(--muted); font-size: 1.05rem; }
+  footer {
+    text-align: center; padding: 2rem; color: #6d6a63; font-size: 0.8rem;
+    border-top: 1px solid #2a2d31;
+  }
+
+  /* ---- Scroll reveal ---- */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <img id="heroImg" src="" alt="Olympic Peninsula">
+  <div class="shade"></div>
+  <div class="title">
+    <div class="trip-tag">May 23–25, 2026 · Washington State</div>
+    <h1>Three days on the<br>Olympic Peninsula</h1>
+    <p>A family road trip through rainforest, mountains, and coastline —
+    told entirely in photographs. No paragraphs required.</p>
+  </div>
+  <div class="scroll-hint">&darr;</div>
+</header>
+
+<!-- STATS STRIP -->
+<div class="strip">
+  <div><div class="n">3</div><div class="l">Days</div></div>
+  <div><div class="n">22</div><div class="l">Photos</div></div>
+  <div><div class="n">1</div><div class="l">Peninsula</div></div>
+  <div><div class="n">&infin;</div><div class="l">Memories</div></div>
+</div>
+
+<!-- DAY SECTIONS (rendered by JavaScript from the photo list below) -->
+<main id="days"></main>
+
+<!-- OUTRO -->
+<section class="outro reveal">
+  <h2>Your camera roll is <span>already a website</span>.</h2>
+  <p>Everything on this page came from one photo gallery and one prompt.
+  Websites don't have to be text and numbers — the photos on your phone
+  are content waiting for a design.</p>
+</section>
+
+<footer>Student demo · Photos © Doug Purnell · Olympic Peninsula, May 2026</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="nav prev" id="lbPrev">&larr;</button>
+  <img id="lbImg" src="" alt="">
+  <button class="nav next" id="lbNext">&rarr;</button>
+  <button class="nav close" id="lbClose">&times;</button>
+  <div class="counter" id="lbCounter"></div>
+</div>
+
+<script>
+  // ============================================================
+  // THE PHOTO LIST IS JUST DATA.
+  // Swap these URLs for your own photos and the whole site
+  // rebuilds itself. Each day = a chapter on the page.
+  // ============================================================
+  const BASE = "https://photos.smugmug.com/2026/2026-05-22-Olympic-Peninsula/";
+  const days = [
+    {
+      title: "Into the Peninsula",
+      date: "Friday · May 23",
+      photos: [
+        "i-kChc7nW/0/LDjh5JjNMkgMjbTpC6hzQKvVFZ78LpxKmVtPRcfgC/L/20260523-DSC_5339-L.jpg",
+        "i-dsKTs6r/0/Ms8j9ZMnDRK25SbgX5F9NPvV4SQmRqTpPn2CWrV5F/L/20260523-DSC_5348-L.jpg",
+        "i-8drj2Cp/0/MZht7xpZ2bzKTZz7W3xtWzScw2BjFK5hs2PNZzLQR/L/20260523-DSC_5350-L.jpg",
+        "i-NLS6jrm/0/KpGJb8Dpnk7GhQbTDMXfpKb4fGCfZg2kbGj6HBsrv/L/20260523-DSC_5352-L.jpg",
+        "i-Fc27t4b/0/Lh2L45sQVLKghrv8sFq2dGG7T9VFGQGFknDhHjG8Z/L/20260523-DSC_5360-L.jpg",
+        "i-KcWJNLm/0/L4wDV9V3gf2pJ3LLvhMqqpFrH38cQXsXqbKfV7cRQ/L/20260523-DSC_5367-L.jpg",
+        "i-CLXJgLF/0/NQ2HrJPdKtZ332LNhfrv5cw2TCB5h7wdxL8kg9kp2/L/20260523-DSC_5369-L.jpg",
+        "i-DcW8pVZ/0/NZxtfvxZvX3BW6VXc9xMj9vPCJ28Sg7PShDGvXczR/L/20260523-DSC_5372-L.jpg",
+        "i-BJszH3Z/0/MXZb4G2ZjH4tXRkvPmhLJd8RtWjxjLqTbcH9rH8kG/L/20260523-DSC_5378-L.jpg",
+        "i-KXLTZpL/0/Lb3BPxGzqTLTf2KcD3p8n3H5Ljf92j5XBRj62jtW8/L/20260523-DSC_5383-L.jpg",
+        "i-GPS57gj/0/M57HKqv48X3PT4xTH66hrJZSfb4mBdNgxJVxgRHLL/L/20260523-DSC_5395-L.jpg"
+      ]
+    },
+    {
+      title: "Deeper In",
+      date: "Saturday · May 24",
+      photos: [
+        "i-8HKCrLF/0/LVxgtnDVPHnqhWrx8Gq4bWWdmm75BTxJSjWfv9LrV/M/20260524-DSC_5428-M.jpg",
+        "i-BHCxbbS/0/LTCNMpdsgK2SJDNZvQQPLCpfhbBpwf8xpmKQXfp5G/M/20260524-DSC_5434-M.jpg",
+        "i-VjWTBft/0/Mm96Snn47z4hQRZNp2ZhWTDm6RzTDnbJzVmtBDcJm/M/20260524-DSC_5456-M.jpg",
+        "i-Fg9V2fT/0/LGMS8WgRKbghXnTkXBxJQ85V6FtQHksJxvHNg6fRW/M/20260524-DSC_5465-M.jpg",
+        "i-w9TCX2W/0/NK8cKmGQWCktncnwsFJPTHhRBCGJrD36r7VHHxwht/L/20260524-DSC_5476-L.jpg"
+      ]
+    },
+    {
+      title: "The Last Light",
+      date: "Sunday · May 25",
+      photos: [
+        "i-X2qjD76/0/LtqsSM9jZHk6cC5sJTJcjP3mnJtvpGbNzFqL8kMFL/L/20260525-DSC_5509-L.jpg",
+        "i-W32JdxJ/0/LQm4sTbX7WQRqjg6rCNX3XsTDSHhBzzwgnBMGGF69/L/20260525-DSC_5511-L.jpg",
+        "i-JVM4Svb/0/MNRdPr8knFHzBzhLtR8tbV9k4qTdTV2PfNmSvqz7n/L/20260525-DSC_5517-L.jpg",
+        "i-D94MCmN/0/LxbnHfNxN9NHkHsVZwgx933GdsP85K4P4n8sBRTVg/L/20260525-DSC_5523-L.jpg",
+        "i-3qdPmtS/0/K3zx3mcDN6pCMb465kwxmTQh4SCf9xx3PF5ssZMK9/L/20260525-DSC_5527-L.jpg",
+        "i-MdGZqrj/0/MRP3WWmCJv5qP7BtSdVwFSXKbrWr5B4NhZb5P56c2/L/20260525-DSC_5529-L.jpg"
+      ]
+    }
+  ];
+
+  // ---- Build a flat list for the lightbox ----
+  const allPhotos = days.flatMap(d => d.photos.map(p => BASE + p));
+
+  // ---- Hero uses the first photo of the trip ----
+  document.getElementById('heroImg').src = allPhotos[0];
+
+  // ---- Render each day as a chapter ----
+  const main = document.getElementById('days');
+  let photoIndex = 0;
+  days.forEach((day, di) => {
+    const section = document.createElement('section');
+    section.className = 'day reveal';
+    section.innerHTML = `
+      <div class="day-head">
+        <span class="num">0${di + 1}</span>
+        <h2>${day.title}</h2>
+      </div>
+      <div class="day-date">${day.date}</div>
+      <div class="grid"></div>`;
+    const grid = section.querySelector('.grid');
+    day.photos.forEach((p, pi) => {
+      const idx = photoIndex++;
+      const fig = document.createElement('figure');
+      if (pi === 0) fig.classList.add('feature');   // first photo of the day goes big
+      fig.innerHTML = `
+        <img src="${BASE + p}" loading="lazy" alt="${day.title} — photo ${pi + 1}">
+        <figcaption>${day.date} · photo ${pi + 1} of ${day.photos.length}</figcaption>`;
+      fig.addEventListener('click', () => openLightbox(idx));
+      grid.appendChild(fig);
+    });
+    main.appendChild(section);
+  });
+
+  // ---- Lightbox ----
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbCounter = document.getElementById('lbCounter');
+  let current = 0;
+  function openLightbox(i) { current = i; render(); lb.classList.add('open'); }
+  function render() {
+    lbImg.src = allPhotos[current];
+    lbCounter.textContent = `${current + 1} / ${allPhotos.length}`;
+  }
+  function step(d) { current = (current + d + allPhotos.length) % allPhotos.length; render(); }
+  document.getElementById('lbPrev').onclick = () => step(-1);
+  document.getElementById('lbNext').onclick = () => step(1);
+  document.getElementById('lbClose').onclick = () => lb.classList.remove('open');
+  lb.addEventListener('click', e => { if (e.target === lb) lb.classList.remove('open'); });
+  addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'ArrowRight') step(1);
+    if (e.key === 'Escape') lb.classList.remove('open');
+  });
+
+  // ---- Scroll reveal ----
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

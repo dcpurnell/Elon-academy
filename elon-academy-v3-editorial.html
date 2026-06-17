@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Elon Academy — A Story in Six Chapters</title>
+<style>
+  /* ====================================================
+     Elon Academy — Version 3: Editorial / Magazine
+     Structure: full-screen chapters + side nav rail.
+     Big serif type, paper background, asymmetric grids.
+     Completely different layout language from V1/V2.
+     ==================================================== */
+  :root {
+    --paper: #f5f1e8;
+    --ink: #1a1612;
+    --maroon: #73000A;
+    --gold: #9c7c2c;
+    --rule: #d8d2c4;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: Georgia, 'Times New Roman', serif;
+    line-height: 1.65;
+  }
+  ::selection { background: var(--maroon); color: var(--paper); }
+
+  /* ---- Side rail (chapter navigation) ---- */
+  .rail {
+    position: fixed; left: 0; top: 0; bottom: 0; width: 72px;
+    border-right: 1px solid var(--rule);
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 1.6rem; z-index: 50;
+    background: var(--paper);
+  }
+  .rail a {
+    font-family: 'Courier New', monospace; font-size: 0.75rem;
+    color: #9a9282; text-decoration: none;
+    writing-mode: vertical-rl; letter-spacing: 2px;
+    transition: color .2s;
+  }
+  .rail a:hover, .rail a.active { color: var(--maroon); font-weight: bold; }
+  .rail .logo {
+    position: absolute; top: 1.2rem;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--maroon); color: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; font-size: 0.9rem; font-family: Georgia, serif;
+  }
+
+  /* ---- Progress bar ---- */
+  .progress {
+    position: fixed; top: 0; left: 0; height: 4px; width: 0;
+    background: var(--maroon); z-index: 60;
+  }
+
+  /* ---- Chapters ---- */
+  main { margin-left: 72px; }
+  .chapter {
+    min-height: 100vh; padding: 8vh 7vw;
+    display: flex; flex-direction: column; justify-content: center;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  .ch-num {
+    font-family: 'Courier New', monospace;
+    font-size: clamp(5rem, 14vw, 13rem); font-weight: bold;
+    color: transparent; -webkit-text-stroke: 1.5px var(--rule);
+    position: absolute; top: 2vh; right: 4vw; line-height: 1;
+    user-select: none; pointer-events: none;
+  }
+  .kicker {
+    font-family: 'Courier New', monospace; font-size: 0.8rem;
+    letter-spacing: 3px; text-transform: uppercase; color: var(--gold);
+    margin-bottom: 1.4rem;
+  }
+  .kicker::before { content: "— "; }
+  h1, h2 { font-weight: normal; letter-spacing: -1px; }
+  h1 { font-size: clamp(2.6rem, 6.5vw, 5.2rem); line-height: 1.08; }
+  h2 { font-size: clamp(2rem, 4.5vw, 3.4rem); line-height: 1.12; margin-bottom: 1.8rem; }
+  em.mark {
+    font-style: italic; color: var(--maroon);
+  }
+  .two-col { display: grid; grid-template-columns: 1.2fr 1fr; gap: 5vw; align-items: start; }
+  @media (max-width: 860px) { .two-col { grid-template-columns: 1fr; } .ch-num { opacity: .5; } }
+
+  .body-text { font-size: 1.12rem; max-width: 56ch; }
+  .body-text p + p { margin-top: 1.1rem; }
+  .body-text .dropcap::first-letter {
+    float: left; font-size: 4.2rem; line-height: 0.85;
+    padding: 0.08em 0.12em 0 0; color: var(--maroon); font-weight: bold;
+  }
+
+  /* ---- Cover ---- */
+  .cover { text-align: left; }
+  .cover .masthead {
+    font-family: 'Courier New', monospace; font-size: 0.85rem;
+    letter-spacing: 4px; text-transform: uppercase;
+    border-top: 3px solid var(--ink); border-bottom: 1px solid var(--ink);
+    padding: 0.6rem 0; margin-bottom: 5vh;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+  }
+  .cover h1 span { display: block; }
+  .cover .deck {
+    font-style: italic; font-size: 1.3rem; color: #5a5244;
+    margin-top: 2rem; max-width: 46ch;
+  }
+  .cover .down {
+    margin-top: 5vh; font-family: 'Courier New', monospace;
+    font-size: 0.8rem; letter-spacing: 2px; color: var(--gold);
+    text-decoration: none;
+  }
+  .cover .down:hover { color: var(--maroon); }
+
+  /* ---- Ticker ---- */
+  .ticker-wrap {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    border-top: 1px solid var(--ink);
+    background: var(--ink); color: var(--paper);
+    overflow: hidden; white-space: nowrap; padding: 0.65rem 0;
+    font-family: 'Courier New', monospace; font-size: 0.85rem; letter-spacing: 1px;
+  }
+  .ticker { display: inline-block; animation: scroll-left 30s linear infinite; }
+  .ticker span { margin: 0 2.2rem; }
+  .ticker b { color: #e8c468; font-weight: bold; }
+  @keyframes scroll-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ---- Big numbers (Ch 2) ---- */
+  .versus { display: grid; grid-template-columns: 1fr 1fr; gap: 4vw; margin-top: 3rem; }
+  @media (max-width: 700px) { .versus { grid-template-columns: 1fr; } }
+  .versus .side { border-top: 3px solid var(--ink); padding-top: 1.2rem; }
+  .versus .side.win { border-top-color: var(--maroon); }
+  .versus .label { font-family: 'Courier New', monospace; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: #8a8270; }
+  .versus .huge { font-size: clamp(4rem, 10vw, 8rem); line-height: 1; color: var(--ink); }
+  .versus .win .huge { color: var(--maroon); }
+  .versus .desc { font-style: italic; color: #5a5244; margin-top: 0.4rem; }
+
+  /* ---- Index list (Ch 3 programs) ---- */
+  .index { border-top: 3px solid var(--ink); counter-reset: item; }
+  .index .row {
+    display: grid; grid-template-columns: 64px 1fr 2fr; gap: 1.5rem;
+    padding: 1.4rem 0; border-bottom: 1px solid var(--rule);
+    align-items: baseline; transition: background .2s, padding-left .2s;
+  }
+  .index .row:hover { background: rgba(115,0,10,0.05); padding-left: 0.6rem; }
+  .index .row .no { font-family: 'Courier New', monospace; color: var(--gold); }
+  .index .row h3 { font-weight: normal; font-size: 1.35rem; }
+  .index .row p { color: #5a5244; font-size: 0.98rem; }
+  @media (max-width: 700px) { .index .row { grid-template-columns: 48px 1fr; } .index .row p { grid-column: 2; } }
+
+  /* ---- Pull quote (Ch 4) ---- */
+  .pullquote {
+    font-size: clamp(1.6rem, 3.6vw, 2.6rem); line-height: 1.3;
+    font-style: italic; max-width: 26ch;
+    border-left: 4px solid var(--maroon); padding-left: 2rem;
+    margin: 2.5rem 0;
+  }
+  .pullquote .attr { display: block; font-size: 1rem; font-style: normal; font-family: 'Courier New', monospace; letter-spacing: 1px; color: #8a8270; margin-top: 1.2rem; }
+
+  /* ---- Margin notes (Ch 4 journey) ---- */
+  .ledger { margin-top: 2rem; }
+  .ledger .entry {
+    display: grid; grid-template-columns: 110px 1fr; gap: 2rem;
+    padding: 1.1rem 0; border-bottom: 1px dotted var(--rule);
+  }
+  .ledger .when { font-family: 'Courier New', monospace; font-size: 0.8rem; color: var(--gold); letter-spacing: 1px; padding-top: 0.3rem; }
+  .ledger h4 { font-weight: normal; font-size: 1.15rem; }
+  .ledger p { color: #5a5244; font-size: 0.95rem; }
+
+  /* ---- Closing (Ch 6) ---- */
+  .closing { background: var(--maroon); color: var(--paper); border-bottom: none; }
+  .closing .ch-num { -webkit-text-stroke-color: rgba(245,241,232,0.25); }
+  .closing .kicker { color: #e8c468; }
+  .closing h2 { color: var(--paper); }
+  .closing .body-text { color: #efe6da; }
+  .closing a.give {
+    display: inline-block; margin-top: 2.5rem;
+    font-family: 'Courier New', monospace; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--paper); text-decoration: none; font-size: 0.95rem;
+    border: 1.5px solid var(--paper); padding: 1rem 2.2rem;
+    transition: background .2s, color .2s;
+  }
+  .closing a.give:hover { background: var(--paper); color: var(--maroon); }
+  .closing .colophon {
+    margin-top: 6vh; padding-top: 1.5rem; border-top: 1px solid rgba(245,241,232,0.3);
+    font-family: 'Courier New', monospace; font-size: 0.75rem; letter-spacing: 1px;
+    color: rgba(245,241,232,0.65);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.8rem;
+  }
+
+  /* ---- Reveal ---- */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 700px) {
+    .rail { display: none; }
+    main { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<nav class="rail">
+  <div class="logo">EA</div>
+  <a href="#ch1">Cover</a>
+  <a href="#ch2">The Gap</a>
+  <a href="#ch3">The Program</a>
+  <a href="#ch4">The Journey</a>
+  <a href="#ch5">The Proof</a>
+  <a href="#ch6">The Ask</a>
+</nav>
+
+<main>
+
+<!-- CHAPTER 1 — COVER -->
+<section class="chapter cover" id="ch1">
+  <div class="ch-num">01</div>
+  <div class="masthead">
+    <span>The Elon Academy</span>
+    <span>Alamance County, N.C.</span>
+    <span>Est. 2007</span>
+  </div>
+  <h1>
+    <span>A college story,</span>
+    <span>written <em class="mark">three summers</em></span>
+    <span>at a time.</span>
+  </h1>
+  <p class="deck">How a free, multi-year program at Elon University takes academically
+  promising high school students — many the first in their families — all the way to a college degree.</p>
+  <a class="down" href="#ch2">Read the story &darr;</a>
+  <div class="ticker-wrap">
+    <div class="ticker" id="ticker">
+      <span><b>176</b> scholars enrolled</span>
+      <span><b>100%</b> accepted to college</span>
+      <span><b>79%</b> earn a college degree</span>
+      <span><b>$5.2M+</b> merit aid earned by the Class of 2023</span>
+      <span><b>3.66</b> average unweighted GPA</span>
+      <span><b>96%</b> attend N.C. colleges</span>
+      <span><b>$0</b> cost to families</span>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 2 — THE GAP -->
+<section class="chapter" id="ch2">
+  <div class="ch-num">02</div>
+  <div class="reveal">
+    <div class="kicker">Chapter Two · The Gap</div>
+    <h2>Nationally, the odds<br>are <em class="mark">stacked</em>.</h2>
+    <div class="two-col">
+      <div class="body-text">
+        <p class="dropcap">Across the country, only 14 percent of low-income students
+        graduate from college. Just a third even enroll. Talent is everywhere —
+        opportunity is not.</p>
+        <p>The Elon Academy was built to close that gap for Alamance County: students
+        with financial need and/or no family history of college, chosen for their
+        academic promise and given a real path.</p>
+      </div>
+      <div class="versus">
+        <div class="side">
+          <div class="label">National · low-income students</div>
+          <div class="huge" data-target="14" data-suffix="%">0%</div>
+          <div class="desc">graduate from college</div>
+        </div>
+        <div class="side win">
+          <div class="label">Elon Academy scholars</div>
+          <div class="huge" data-target="79" data-suffix="%">0%</div>
+          <div class="desc">earn a college degree</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 3 — THE PROGRAM -->
+<section class="chapter" id="ch3">
+  <div class="ch-num">03</div>
+  <div class="reveal">
+    <div class="kicker">Chapter Three · The Program</div>
+    <h2>Five programs,<br>one <em class="mark">promise</em>.</h2>
+    <div class="index">
+      <div class="row"><span class="no">i.</span><h3>Summer Academy</h3><p>Three consecutive summers living and learning on Elon's campus — before sophomore, junior, and senior years.</p></div>
+      <div class="row"><span class="no">ii.</span><h3>Saturday Academy</h3><p>Year-round Saturday sessions for scholars and families: academics, college prep, community.</p></div>
+      <div class="row"><span class="no">iii.</span><h3>Academic Coaching</h3><p>One-on-one coaching that keeps scholars on track in their toughest courses.</p></div>
+      <div class="row"><span class="no">iv.</span><h3>College Mentors</h3><p>Current college students guide scholars through applications, essays, and decisions.</p></div>
+      <div class="row"><span class="no">v.</span><h3>College Success</h3><p>Support continues on each scholar's college campus — until the diploma is in hand.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 4 — THE JOURNEY -->
+<section class="chapter" id="ch4">
+  <div class="ch-num">04</div>
+  <div class="reveal">
+    <div class="kicker">Chapter Four · The Journey</div>
+    <div class="two-col">
+      <div>
+        <h2>From freshman year<br>to <em class="mark">cap and gown</em>.</h2>
+        <div class="pullquote">
+          The Academy doesn't stop at college acceptance. It stays until the degree is finished.
+          <span class="attr">— The Elon Academy model</span>
+        </div>
+      </div>
+      <div class="ledger">
+        <div class="entry"><span class="when">YEAR 1</span><div><h4>Apply &amp; join</h4><p>Freshman-year students across Alamance County apply and are selected as scholars.</p></div></div>
+        <div class="entry"><span class="when">YEARS 2–4</span><div><h4>Three summer residencies</h4><p>Scholars live on Elon's campus each summer, plus year-round Saturday programs with family.</p></div></div>
+        <div class="entry"><span class="when">GRAD SUMMER</span><div><h4>Transitions to College</h4><p>Scholars and families prepare together for the leap to campus life.</p></div></div>
+        <div class="entry"><span class="when">COLLEGE</span><div><h4>College Success Program</h4><p>Continuing support on their campuses — through to graduation.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 5 — THE PROOF -->
+<section class="chapter" id="ch5">
+  <div class="ch-num">05</div>
+  <div class="reveal">
+    <div class="kicker">Chapter Five · The Proof</div>
+    <h2>The record speaks<br><em class="mark">plainly</em>.</h2>
+    <div class="two-col">
+      <div class="body-text">
+        <p class="dropcap">Every high school scholar takes at least one honors or AP class.
+        The average unweighted GPA is 3.66. One hundred percent are accepted to colleges
+        and universities, and 96 percent stay in North Carolina.</p>
+        <p>Eleven scholars have earned the nation's most competitive merit awards —
+        Gates-Millennium, Golden Door, Morehead-Cain, and Cheatham-White scholarships.
+        The Class of 2023 alone earned more than $5.2 million in merit-based aid.</p>
+      </div>
+      <div class="versus">
+        <div class="side win">
+          <div class="label">College acceptance</div>
+          <div class="huge" data-target="100" data-suffix="%">0%</div>
+          <div class="desc">of Academy scholars</div>
+        </div>
+        <div class="side win">
+          <div class="label">Merit aid · Class of 2023</div>
+          <div class="huge" data-target="5.2" data-decimal="1" data-prefix="$" data-suffix="M">$0M</div>
+          <div class="desc">earned in scholarships</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 6 — THE ASK -->
+<section class="chapter closing" id="ch6">
+  <div class="ch-num">06</div>
+  <div class="reveal">
+    <div class="kicker">Chapter Six · The Ask</div>
+    <h2>This story runs on<br>generosity — <em class="mark" style="color:#e8c468">not tuition</em>.</h2>
+    <div class="body-text">
+      <p>The Elon Academy was launched by Elon University, but it isn't funded by tuition
+      dollars. Every chapter of every scholar's story is underwritten by individuals,
+      businesses, and foundations who believe promising students deserve the chance to write one.</p>
+    </div>
+    <a class="give" href="https://www.elon.edu/academygift">Support the Elon Academy</a>
+    <div class="colophon">
+      <span>elonacademy@elon.edu · (336) 278-6109</span>
+      <span>Mooney Building, Suite 302 · Elon, NC 27244</span>
+      <span>Student demo · Center for Access &amp; Success</span>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+  // Duplicate ticker content for a seamless loop
+  const ticker = document.getElementById('ticker');
+  ticker.innerHTML += ticker.innerHTML;
+
+  // Reading progress bar
+  const bar = document.getElementById('progress');
+  addEventListener('scroll', () => {
+    const h = document.documentElement;
+    bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+  });
+
+  // Reveal chapters + animate big numbers
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        e.target.querySelectorAll('.huge[data-target]').forEach(animateCounter);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  function animateCounter(el) {
+    if (el.dataset.done) return;
+    el.dataset.done = "1";
+    const target = parseFloat(el.dataset.target);
+    const decimals = parseInt(el.dataset.decimal || "0");
+    const prefix = el.dataset.prefix || "";
+    const suffix = el.dataset.suffix || "";
+    const dur = 1400, start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = prefix + (target * eased).toFixed(decimals) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Highlight active chapter in the rail
+  const railLinks = [...document.querySelectorAll('.rail a')];
+  const chapters = [...document.querySelectorAll('.chapter')];
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const i = chapters.indexOf(e.target);
+        railLinks.forEach((a, j) => a.classList.toggle('active', i === j));
+      }
+    });
+  }, { threshold: 0.5 });
+  chapters.forEach(c => spy.observe(c));
+</script>
+</body>
+</html>
