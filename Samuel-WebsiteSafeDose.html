@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SafeDose — Friendly medication reminders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#F4F8F6;
+    --surface:#FFFFFF;
+    --ink:#16302C;
+    --muted:#566C67;
+    --primary:#0F7468;
+    --primary-deep:#0A4F47;
+    --mint:#DDEFE9;
+    --mint-line:#BFE0D8;
+    --honey:#C9821F;
+    --honey-soft:#FBEFD8;
+    --honey-line:#EBD3A0;
+    --radius:18px;
+    --maxw:1080px;
+    --shadow:0 18px 48px -28px rgba(10,79,71,0.28);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Public Sans",system-ui,sans-serif;
+    font-size:18px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:500;line-height:1.12;letter-spacing:-0.01em;margin:0;}
+  p{margin:0;}
+  a{color:var(--primary-deep);}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+  .eyebrow{
+    font-size:0.78rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--primary);margin-bottom:14px;
+  }
+  .section-head{max-width:66ch;margin-bottom:40px;}
+  .section-head h2{max-width:16ch;}
+
+  /* NAV */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(244,248,246,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--mint-line);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:70px;}
+  .brand{display:flex;align-items:center;gap:10px;font-family:"Fraunces",serif;font-weight:600;font-size:1.35rem;color:var(--ink);text-decoration:none;}
+  .brand .mark{width:30px;height:30px;border-radius:9px;background:var(--primary);display:grid;place-items:center;color:#fff;flex:none;}
+  .brand .mark svg{width:18px;height:18px;}
+  .nav-links{display:flex;gap:28px;align-items:center;}
+  .nav-links a{color:var(--ink);text-decoration:none;font-weight:500;font-size:0.98rem;}
+  .nav-links a:hover{color:var(--primary);}
+  .nav-cta{background:var(--primary);color:#fff !important;padding:10px 18px;border-radius:999px;font-weight:600;}
+  .nav-cta:hover{background:var(--primary-deep);}
+  .menu-btn{display:none;background:none;border:1px solid var(--mint-line);border-radius:10px;padding:8px 10px;color:var(--ink);font-size:1rem;cursor:pointer;}
+
+  /* HERO */
+  .hero{padding:72px 0 68px;position:relative;overflow:hidden;}
+  .hero::before{content:"";position:absolute;top:-60px;right:-60px;width:320px;height:320px;background:radial-gradient(circle, rgba(15,116,104,0.12) 0%, rgba(15,116,104,0) 72%);pointer-events:none;}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:56px;align-items:center;position:relative;z-index:1;}
+  .hero h1{font-size:clamp(2.4rem,5vw,3.6rem);}
+  .hero h1 em{font-style:italic;color:var(--primary);}
+  .hero p.lead{margin-top:22px;font-size:1.18rem;color:var(--muted);max-width:34ch;}
+  .hero-actions{margin-top:30px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+  .btn{display:inline-block;border:none;cursor:pointer;font-family:inherit;font-weight:600;font-size:1.02rem;padding:14px 26px;border-radius:999px;text-decoration:none;transition:transform .12s ease,background .2s ease,box-shadow .2s ease;box-shadow:0 10px 24px -16px rgba(10,79,71,0.3);}
+  .btn-primary{background:var(--primary);color:#fff;}
+  .btn-primary:hover{background:var(--primary-deep);transform:translateY(-1px);}
+  .btn-ghost{background:rgba(255,255,255,0.75);color:var(--primary-deep);border:1.5px solid var(--mint-line);}
+  .btn-ghost:hover{border-color:var(--primary);background:#fff;}
+  .reassure{margin-top:18px;font-size:0.92rem;color:var(--muted);}
+
+  /* Phone / message signature */
+  .phone{
+    background:var(--surface);
+    border:1px solid var(--mint-line);
+    border-radius:28px;
+    padding:20px 18px 26px;
+    box-shadow:var(--shadow);
+    max-width:360px;margin:0 auto;
+  }
+  .phone-top{display:flex;align-items:center;gap:10px;padding:4px 6px 16px;border-bottom:1px solid var(--mint);}
+  .phone-top .av{width:34px;height:34px;border-radius:50%;background:var(--mint);display:grid;place-items:center;color:var(--primary-deep);font-weight:700;font-size:0.9rem;}
+  .phone-top .who{font-weight:600;font-size:0.95rem;}
+  .phone-top .who span{display:block;font-weight:400;font-size:0.78rem;color:var(--muted);}
+  .thread{display:flex;flex-direction:column;gap:12px;padding-top:18px;}
+  .bub{max-width:80%;padding:11px 15px;border-radius:16px;font-size:0.96rem;line-height:1.45;}
+  .bub.them{align-self:flex-start;background:var(--mint);border-bottom-left-radius:5px;color:var(--ink);}
+  .bub.me{align-self:flex-end;background:var(--primary);color:#fff;border-bottom-right-radius:5px;}
+  .bub.note{align-self:center;background:var(--honey-soft);border:1px solid var(--honey-line);color:#6c4a12;font-size:0.84rem;text-align:center;border-radius:12px;max-width:92%;}
+
+  /* SECTIONS */
+  section{padding:74px 0;}
+  .section-head{max-width:60ch;margin-bottom:44px;}
+  .section-head h2{font-size:clamp(1.9rem,3.6vw,2.6rem);}
+  .section-head p{margin-top:16px;color:var(--muted);font-size:1.1rem;}
+
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
+  .card{background:var(--surface);border:1px solid var(--mint-line);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;}
+  .card:hover,.step:hover,.plan:hover{transform:translateY(-2px);border-color:var(--primary);box-shadow:0 22px 54px -30px rgba(10,79,71,0.35);}
+  .card .ic{width:46px;height:46px;border-radius:12px;background:var(--mint);display:grid;place-items:center;color:var(--primary-deep);margin-bottom:16px;}
+  .card .ic svg{width:24px;height:24px;}
+  .card h3{font-size:1.25rem;margin-bottom:8px;}
+  .card p{color:var(--muted);font-size:1rem;}
+
+  /* HOW IT WORKS */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;counter-reset:step;}
+  .step{background:var(--surface);border:1px solid var(--mint-line);border-radius:var(--radius);padding:30px 26px;position:relative;box-shadow:var(--shadow);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;}
+  .step .num{font-family:"Fraunces",serif;font-size:1rem;font-weight:600;color:#fff;background:var(--primary);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;margin-bottom:18px;}
+  .step h3{font-size:1.2rem;margin-bottom:8px;}
+  .step p{color:var(--muted);font-size:1rem;}
+
+  /* IMPORTANT / disclaimer */
+  .notice{background:var(--honey-soft);border:1px solid var(--honey-line);border-radius:24px;padding:44px 40px;box-shadow:var(--shadow);}
+  .notice .eyebrow{color:var(--honey);}
+  .notice h2{font-size:clamp(1.7rem,3vw,2.2rem);color:#5c3f0e;}
+  .notice .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 36px;margin-top:26px;}
+  .notice .item{display:flex;gap:14px;}
+  .notice .item .dot{flex:none;width:26px;height:26px;border-radius:50%;background:var(--honey);color:#fff;display:grid;place-items:center;font-weight:700;font-size:0.85rem;margin-top:2px;}
+  .notice .item h3{font-family:"Public Sans",sans-serif;font-size:1.02rem;font-weight:700;color:#5c3f0e;margin-bottom:3px;}
+  .notice .item p{font-size:0.96rem;color:#6c4a12;}
+
+  /* PRICING */
+  #pricing{background:linear-gradient(180deg,transparent,rgba(221,239,233,0.5));}
+  .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch;}
+  .plan{background:var(--surface);border:1px solid var(--mint-line);border-radius:var(--radius);padding:32px 28px;display:flex;flex-direction:column;box-shadow:var(--shadow);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;}
+  .plan.featured{border:2px solid var(--primary);box-shadow:0 24px 50px -32px rgba(10,79,71,0.5);}
+  .plan .tag{align-self:flex-start;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--primary);background:var(--mint);padding:5px 12px;border-radius:999px;margin-bottom:16px;}
+  .plan h3{font-size:1.4rem;margin-bottom:6px;}
+  .plan .price{font-family:"Fraunces",serif;font-size:2.4rem;font-weight:500;color:var(--ink);margin:8px 0 2px;}
+  .plan .price small{font-family:"Public Sans",sans-serif;font-size:0.95rem;font-weight:500;color:var(--muted);}
+  .plan ul{list-style:none;padding:0;margin:20px 0 26px;display:flex;flex-direction:column;gap:11px;}
+  .plan li{display:flex;gap:10px;font-size:0.98rem;color:var(--muted);}
+  .plan li svg{flex:none;width:20px;height:20px;color:var(--primary);margin-top:2px;}
+  .plan .btn{margin-top:auto;text-align:center;}
+  .price-note{margin-top:28px;text-align:center;color:var(--muted);font-size:0.96rem;max-width:60ch;margin-left:auto;margin-right:auto;}
+
+  /* SIGN UP */
+  .signup-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:48px;align-items:start;}
+  .form-card{background:var(--surface);border:1px solid var(--mint-line);border-radius:24px;padding:34px;box-shadow:var(--shadow);}
+  .field{margin-bottom:18px;}
+  .field label{display:block;font-weight:600;font-size:0.95rem;margin-bottom:7px;}
+  .field input,.field select,.field textarea{
+    width:100%;font-family:inherit;font-size:1rem;color:var(--ink);
+    padding:13px 15px;border:1.5px solid var(--mint-line);border-radius:12px;background:#fbfdfc;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(15,116,104,0.15);}
+  .field textarea{resize:vertical;min-height:84px;}
+  .check{display:flex;gap:11px;align-items:flex-start;font-size:0.92rem;color:var(--muted);margin-bottom:22px;}
+  .check input{margin-top:4px;width:18px;height:18px;flex:none;accent-color:var(--primary);}
+  .form-msg{display:none;margin-top:16px;padding:14px 16px;border-radius:12px;background:var(--mint);color:var(--primary-deep);font-size:0.95rem;}
+  .privacy-note{font-size:0.86rem;color:var(--muted);margin-top:14px;}
+
+  /* ABOUT */
+  #about .wrap{display:grid;grid-template-columns:0.85fr 1.15fr;gap:48px;align-items:center;}
+  .about-portrait{background:var(--mint);border:1px solid var(--mint-line);border-radius:24px;aspect-ratio:4/5;display:grid;place-items:center;text-align:center;padding:30px;box-shadow:var(--shadow);}
+  .about-portrait .initials{font-family:"Fraunces",serif;font-size:3.6rem;color:var(--primary-deep);background:#fff;width:120px;height:120px;border-radius:50%;display:grid;place-items:center;margin-bottom:18px;box-shadow:0 12px 30px -16px rgba(10,79,71,0.5);}
+  .about-portrait p{color:var(--primary-deep);font-weight:600;}
+  .about-portrait span{display:block;font-weight:400;color:var(--muted);font-size:0.92rem;}
+  #about h2{font-size:clamp(1.9rem,3.4vw,2.5rem);margin-bottom:18px;}
+  #about p{color:var(--muted);font-size:1.08rem;margin-bottom:16px;}
+
+  /* CONTACT */
+  #contact{background:var(--primary-deep);color:#eafaf6;}
+  #contact h2{color:#fff;font-size:clamp(1.9rem,3.4vw,2.5rem);}
+  #contact .section-head p{color:#bfe6dd;}
+  .contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:10px;}
+  .contact-item{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:20px;padding:24px 22px;box-shadow:0 16px 30px -24px rgba(0,0,0,0.35);backdrop-filter:blur(6px);transition:transform .2s ease,border-color .2s ease,background .2s ease;}
+  .contact-item:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.28);background:rgba(255,255,255,0.11);}
+  .contact-item .ic{width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,0.12);display:grid;place-items:center;margin-bottom:14px;}
+  .contact-item .ic svg{width:22px;height:22px;color:#eafaf6;}
+  .contact-item h3{font-family:"Public Sans",sans-serif;font-weight:700;font-size:1.05rem;color:#fff;margin-bottom:6px;letter-spacing:0.01em;}
+  .contact-item p{color:#cdeae3;font-size:0.98rem;line-height:1.6;}
+  .contact-item a{color:#fff;text-decoration:none;font-weight:600;}
+  .contact-item a:hover{text-decoration:underline;}
+
+  /* FOOTER */
+  footer{background:#08332D;color:#9fc7bf;padding:48px 0 56px;font-size:0.92rem;}
+  .foot-top{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:24px;margin-bottom:24px;}
+  .foot-brand{display:flex;align-items:center;gap:10px;color:#fff;font-family:"Fraunces",serif;font-size:1.2rem;font-weight:600;}
+  .foot-brand .mark{width:28px;height:28px;border-radius:8px;background:var(--primary);display:grid;place-items:center;}
+  .foot-brand .mark svg{width:16px;height:16px;}
+  .foot-disclaimer{max-width:70ch;line-height:1.7;}
+  .foot-disclaimer strong{color:#cfe7e1;}
+
+  /* RESPONSIVE */
+  @media (max-width:860px){
+    .nav-links{display:none;}
+    .menu-btn{display:inline-block;}
+    .nav-links.open{display:flex;position:absolute;top:70px;left:0;right:0;flex-direction:column;background:var(--bg);border-bottom:1px solid var(--mint-line);padding:18px 24px;gap:18px;}
+    .hero-grid,.signup-grid,#about .wrap{grid-template-columns:1fr;gap:40px;}
+    .phone{order:-1;}
+    .cards,.steps,.price-grid,.contact-grid,.notice .grid{grid-template-columns:1fr;}
+    section{padding:56px 0;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none !important;animation:none !important;}
+  }
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;}
+  .reveal.in{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="brand">
+      <span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.35-9.5-8.5C.8 9.5 2 6 5.5 6 8 6 9 8 12 8s4-2 6.5-2C22 6 23.2 9.5 21.5 12.5 19 16.65 12 21 12 21z"/></svg></span>
+      SafeDose
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#what">What it does</a>
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#about">About</a>
+      <a href="#signup" class="nav-cta">Get started</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">Menu</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<a id="top"></a>
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Medication reminders, made gentle</p>
+      <h1>A friendly nudge so the right dose <em>happens at the right time.</em></h1>
+      <p class="lead">SafeDose sends warm, personal reminders at the times you choose and can quietly let a family member know a dose was taken — all in a calm, reassuring experience that feels easy to trust.</p>
+      <div class="hero-actions">
+        <a href="#signup" class="btn btn-primary">Get started</a>
+        <a href="#how" class="btn btn-ghost">See how it works</a>
+      </div>
+      <p class="reassure">A helpful reminder service — not a replacement for your doctor or pharmacist.</p>
+    </div>
+
+    <div class="phone" aria-hidden="true">
+      <div class="phone-top">
+        <span class="av">SD</span>
+        <span class="who">SafeDose Reminders<span>Today, 9:00 AM</span></span>
+      </div>
+      <div class="thread">
+        <div class="bub them">Good morning, Eleanor 🌿 It's time for your 9:00 medication. Reply when you've taken it.</div>
+        <div class="bub me">Just took it, thank you!</div>
+        <div class="bub note">SafeDose let Eleanor's daughter know her morning dose was confirmed.</div>
+        <div class="bub them">Lovely. Have a wonderful day — see you at 6:00 this evening. 💛</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IT DOES -->
+<section id="what">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">What SafeDose does</p>
+      <h2>The small, steady help that makes a routine stick.</h2>
+      <p>SafeDose isn't complicated. It does a few useful things really well, so taking medication on time feels less like one more thing to remember.</p>
+    </div>
+    <div class="cards">
+      <div class="card reveal">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+        <h3>Reminders at your times</h3>
+        <p>Personal text reminders sent at exactly the times you set, in a warm, plain-spoken tone — not a robotic alarm.</p>
+      </div>
+      <div class="card reveal">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <h3>A simple check-in</h3>
+        <p>Reply to confirm a dose was taken. If there's no reply after a while, SafeDose sends one gentle follow-up.</p>
+      </div>
+      <div class="card reveal">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+        <h3>Optional family heads-up</h3>
+        <p>With everyone's permission, a family member can get a quiet note when a dose is confirmed — for a little peace of mind.</p>
+      </div>
+      <div class="card reveal">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+        <h3>Help setting up your week</h3>
+        <p>We'll help you lay out a clear weekly schedule the first time, so every reminder lands at the right moment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" style="padding-top:20px;">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">How it works</p>
+      <h2>Three steps, then it runs quietly in the background.</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <span class="num">1</span>
+        <h3>Tell us the schedule</h3>
+        <p>Share the medication times you want reminders for and who (if anyone) should get a heads-up. We'll set it up with you.</p>
+      </div>
+      <div class="step reveal">
+        <span class="num">2</span>
+        <h3>Get friendly reminders</h3>
+        <p>At each time you chose, a warm text arrives. Reply when you've taken it, and SafeDose marks it done.</p>
+      </div>
+      <div class="step reveal">
+        <span class="num">3</span>
+        <h3>Stay on track together</h3>
+        <p>Miss a reply and we'll send one gentle nudge. If you've opted in, your chosen family member gets a quiet note.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPORTANT / DISCLAIMER -->
+<section style="padding-top:20px;">
+  <div class="wrap">
+    <div class="notice reveal">
+      <p class="eyebrow">Good to know before you start</p>
+      <h2>Honest about what SafeDose is — and isn't.</h2>
+      <div class="grid">
+        <div class="item">
+          <span class="dot">!</span>
+          <div>
+            <h3>Not for emergencies</h3>
+            <p>If you or someone you care for is unwell or in danger, call 911 (or your local emergency number) right away. SafeDose can't respond to emergencies.</p>
+          </div>
+        </div>
+        <div class="item">
+          <span class="dot">!</span>
+          <div>
+            <h3>Not medical advice</h3>
+            <p>SafeDose doesn't give health advice or change anything about your medication. Questions about your medicine belong with your doctor or pharmacist.</p>
+          </div>
+        </div>
+        <div class="item">
+          <span class="dot">!</span>
+          <div>
+            <h3>A helpful aid, not a guarantee</h3>
+            <p>Text messages can be delayed or missed. SafeDose is a helpful backup for your memory — please keep other safeguards in place too, like a pill organizer or pharmacy auto-refills.</p>
+          </div>
+        </div>
+        <div class="item">
+          <span class="dot">!</span>
+          <div>
+            <h3>Your information stays private</h3>
+            <p>We only collect what's needed to send your reminders, we never sell it, and we only share a dose confirmation with the family contact you've approved.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Plans</p>
+      <h2>Start free. Add more only if it helps.</h2>
+      <p>SafeDose began as a way to help neighbors, so the core reminder service is free. The optional plans below help cover costs as it grows.</p>
+    </div>
+    <div class="price-grid">
+      <div class="plan featured reveal">
+        <span class="tag">Free for the community</span>
+        <h3>Neighbor</h3>
+        <div class="price">$0<small> / month</small></div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Up to 2 reminders a day</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Reply-to-confirm check-in</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> One gentle follow-up</li>
+        </ul>
+        <a href="#signup" class="btn btn-primary">Get started</a>
+      </div>
+      <div class="plan reveal">
+        <span class="tag">Optional</span>
+        <h3>Family</h3>
+        <div class="price">$10<small> / month</small></div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Everything in Neighbor</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Multiple reminders a day</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Family confirmation notes</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Weekly schedule setup</li>
+        </ul>
+        <a href="#signup" class="btn btn-ghost">Choose Family</a>
+      </div>
+      <div class="plan reveal">
+        <span class="tag">Optional</span>
+        <h3>Plus</h3>
+        <div class="price">$20<small> / month</small></div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Everything in Family</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> A scheduled check-in call</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Custom schedules &amp; notes</li>
+        </ul>
+        <a href="#signup" class="btn btn-ghost">Choose Plus</a>
+      </div>
+    </div>
+    <p class="price-note">Thinking about charging for this someday? That's a real business with real responsibilities — talk it through carefully and keep the free community plan available for people who need it.</p>
+  </div>
+</section>
+
+<!-- SIGN UP -->
+<section id="signup" style="padding-top:20px;">
+  <div class="wrap signup-grid">
+    <div>
+      <p class="eyebrow">Get started</p>
+      <h2 style="font-size:clamp(1.9rem,3.4vw,2.5rem);margin-bottom:16px;">Tell us how you’d like us to reach you.</h2>
+      <p style="color:var(--muted);font-size:1.08rem;margin-bottom:18px;">Fill out your information and SafeDose will contact you directly so we can talk through the reminder plan together. If you're setting this up for someone else, fill it in together so everyone's on the same page.</p>
+      <p style="color:var(--muted);font-size:1.08rem;">Prefer to talk it through first? Call the SafeDose line on the contact card below.</p>
+    </div>
+
+    <div class="form-card">
+      <div class="field">
+        <label for="fname">Full name</label>
+        <input id="fname" type="text" placeholder="e.g. Eleanor Reyes" />
+      </div>
+      <div class="field">
+        <label for="phone">Phone number for reminders</label>
+        <input id="phone" type="tel" placeholder="(555) 123-4567" />
+      </div>
+      <div class="field">
+        <label for="times">Medication times</label>
+        <textarea id="times" placeholder="e.g. 9:00 AM and 6:00 PM"></textarea>
+      </div>
+      <div class="field">
+        <label for="family">Family contact (optional)</label>
+        <input id="family" type="text" placeholder="Name &amp; phone of someone to notify" />
+      </div>
+      <div class="field">
+        <label for="method">Preferred reminder style</label>
+        <select id="method">
+          <option>Text message</option>
+          <option>Phone call</option>
+          <option>Both</option>
+        </select>
+      </div>
+      <label class="check">
+        <input type="checkbox" id="consent" />
+        <span>I understand SafeDose sends reminders to help with my routine, isn't medical advice, and isn't for emergencies — and the person receiving reminders agrees to take part.</span>
+      </label>
+      <button class="btn btn-primary" id="submitBtn" style="width:100%;">Request a call/text</button>
+      <div class="form-msg" id="formMsg" role="status">Thanks! We’ll reach out to you through the contact details you provide as soon as the message service is connected.</div>
+      <p class="privacy-note">We only use these details to set up your reminders. We never sell your information.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="about-portrait">
+      <span class="initials">ST</span>
+      <p>Samuel Tyderek<span>Founder · North Carolina</span></p>
+    </div>
+    <div>
+      <p class="eyebrow">About SafeDose</p>
+      <h2>Started by Samuel Tyderek, a 15-year-old who wanted to help.</h2>
+      <p>I’m Samuel Tyderek, a student and founder from North Carolina, and I started SafeDose because I noticed how many seniors and busy families struggle to keep medication on schedule — and how much stress that adds to everyone who loves them.</p>
+      <p>My goal is simple: make staying on track feel easier and kinder. SafeDose is a reminder service built around real people, not a hospital system. It doesn't replace doctors, pharmacists, or good habits — it just gives them a gentle, reliable hand.</p>
+      <p>I’m building this carefully, with grown-ups I trust helping me along the way, because the people SafeDose is for deserve something done right.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow" style="color:#8fd6c8;">Contact</p>
+      <h2>We're easy to reach.</h2>
+      <p>Questions before you start, or want to set things up over the phone? Get in touch.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4 0-7 2-7 4v1h14v-1c0-2-3-4-7-4Z"/></svg></span>
+        <h3>Founder</h3>
+        <p>Samuel Tyderek<br /><span style="font-size:0.86rem;">North Carolina</span></p>
+      </div>
+      <div class="contact-item">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.71 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.58 2.81.71A2 2 0 0 1 22 16.92z"/></svg></span>
+        <h3>Phone</h3>
+        <p><a href="tel:919-224-9411">919-224-9411</a><br /><span style="font-size:0.86rem;opacity:0.9;">Call or text if you'd like to talk it through.</span></p>
+      </div>
+      <div class="contact-item">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+        <h3>Hours</h3>
+        <p>After school &amp; weekends<br /><span style="font-size:0.86rem;">Set hours you can actually keep</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.35-9.5-8.5C.8 9.5 2 6 5.5 6 8 6 9 8 12 8s4-2 6.5-2C22 6 23.2 9.5 21.5 12.5 19 16.65 12 21 12 21z"/></svg></span>
+        SafeDose
+      </div>
+      <div style="color:#7fb3ab;">A community project from North Carolina 💛</div>
+    </div>
+    <p class="foot-disclaimer">
+      <strong>Please remember:</strong> SafeDose is a friendly reminder service, not a medical provider. It does not give medical advice, does not replace care from your doctor or pharmacist, and cannot help in an emergency — if someone is unwell or in danger, call 911 right away. Text messages can sometimes be delayed or missed, so always keep other safeguards in place. By using SafeDose you agree it is a helpful reminder aid only.
+    </p>
+    <p style="margin-top:18px;color:#6ea69d;">© 2026 SafeDose. Built with care.</p>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu
+  var menuBtn = document.getElementById('menuBtn');
+  var navLinks = document.getElementById('navLinks');
+  menuBtn.addEventListener('click', function(){ navLinks.classList.toggle('open'); });
+  navLinks.addEventListener('click', function(e){ if(e.target.tagName === 'A'){ navLinks.classList.remove('open'); } });
+
+  // Reminder form
+  var submitBtn = document.getElementById('submitBtn');
+  var formMsg = document.getElementById('formMsg');
+  var fname = document.getElementById('fname');
+  var phone = document.getElementById('phone');
+  var times = document.getElementById('times');
+  var family = document.getElementById('family');
+  var method = document.getElementById('method');
+  var consent = document.getElementById('consent');
+
+  submitBtn.addEventListener('click', function(){
+    var payload = {
+      fullName: fname.value.trim(),
+      phone: phone.value.trim(),
+      times: times.value.trim(),
+      family: family.value.trim(),
+      method: method.value,
+      consent: consent.checked
+    };
+
+    if (!payload.fullName || !payload.phone || !payload.times || !payload.consent) {
+      formMsg.style.display = 'block';
+      formMsg.style.background = '#fff3e0';
+      formMsg.style.color = '#8a4b00';
+      formMsg.textContent = 'Please add your name, phone number, medication times, and confirm consent before scheduling reminders.';
+      formMsg.scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+
+    localStorage.setItem('safedoseReminder', JSON.stringify(payload));
+    formMsg.style.display = 'block';
+    formMsg.style.background = 'var(--mint)';
+    formMsg.style.color = 'var(--primary-deep)';
+    formMsg.textContent = 'Scheduling your reminder now...';
+    formMsg.scrollIntoView({behavior:'smooth', block:'center'});
+
+    fetch('http://localhost:3000/api/send-reminder', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    })
+    .then(function(res){ return res.json(); })
+    .then(function(data){
+      if (data && data.ok) {
+        formMsg.innerHTML = '<strong>Thanks for reaching out.</strong> A real message is being sent to ' + payload.phone + ' so SafeDose can contact you directly.';
+      } else {
+        formMsg.innerHTML = '<strong>Thanks for reaching out.</strong> Your request is saved locally, and the contact service will send a live message once it is running and configured.';
+      }
+    })
+    .catch(function(){
+      formMsg.innerHTML = '<strong>Thanks for reaching out.</strong> Your request is saved locally, and the contact service will send a live message once it is running and configured.';
+    });
+  });
+
+  // Scroll reveal
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, {threshold:0.12});
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+  }
+</script>
+</body>
+</html>

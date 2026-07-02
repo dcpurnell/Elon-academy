@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Space & Astronomy – A Tiny Universe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #050814;
+      --bg-alt: #080d1f;
+      --accent: #4fd1ff;
+      --accent-soft: #9ae6ff;
+      --text-main: #f7fafc;
+      --text-muted: #a0aec0;
+      --card: #0b1224;
+      --highlight: #fbd38d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #1a2540 0, #050814 55%, #000 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1.5px 1.5px at 80% 30%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1.8px 1.8px at 30% 70%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 60% 80%, rgba(255,255,255,0.4), transparent);
+      opacity: 0.7;
+      z-index: 0;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 3.5rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    header h1 {
+      font-size: 2.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-shadow: 0 0 12px rgba(79, 209, 255, 0.8);
+    }
+
+    header p {
+      margin-top: 0.75rem;
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    .tagline {
+      font-style: italic;
+      color: var(--accent-soft);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 1.75rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    section.card {
+      background: linear-gradient(145deg, var(--card), var(--bg-alt));
+      border-radius: 1rem;
+      padding: 1.5rem 1.6rem;
+      box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.7),
+        0 0 0 1px rgba(79, 209, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    section.card h2 {
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+      color: var(--accent-soft);
+    }
+
+    section.card h3 {
+      font-size: 1.05rem;
+      margin-top: 1rem;
+      margin-bottom: 0.35rem;
+      color: var(--highlight);
+    }
+
+    section.card p {
+      font-size: 0.98rem;
+      color: var(--text-main);
+    }
+
+    .muted {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(79, 209, 255, 0.12);
+      color: var(--accent-soft);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .pill span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(79, 209, 255, 0.9);
+    }
+
+    .nebula-visual {
+      margin-top: 1rem;
+      border-radius: 0.9rem;
+      padding: 1rem;
+      background: radial-gradient(circle at 20% 0%, #ff9cf3 0, transparent 40%),
+        radial-gradient(circle at 80% 100%, #7dd3fc 0, transparent 45%),
+        radial-gradient(circle at 50% 50%, #fefcbf 0, transparent 35%),
+        #050814;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nebula-visual::before,
+    .nebula-visual::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 30% 50%, rgba(255,255,255,0.2), transparent 55%),
+        radial-gradient(circle at 70% 50%, rgba(255,255,255,0.18), transparent 55%);
+      mix-blend-mode: screen;
+      opacity: 0.7;
+    }
+
+    .nebula-label {
+      position: relative;
+      z-index: 1;
+      font-size: 0.85rem;
+      color: var(--text-main);
+      text-align: right;
+      text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+    }
+
+    .nebula-label strong {
+      color: var(--accent-soft);
+    }
+
+    ul {
+      list-style: none;
+      margin-top: 0.75rem;
+    }
+
+    ul li {
+      margin-bottom: 0.45rem;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.4rem;
+    }
+
+    ul li::before {
+      content: "✦";
+      color: var(--accent-soft);
+      font-size: 0.8rem;
+      margin-top: 0.15rem;
+    }
+
+    .footer-note {
+      margin-top: 2.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .footer-note span {
+      color: var(--accent-soft);
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+
+  <div class="wrapper">
+    <header>
+      <h1>Space & Astronomy</h1>
+      <p class="tagline">Two favorite things, one endless sky.</p>
+      <p>Exploring the universe one cool discovery at a time.</p>
+    </header>
+
+    <main class="grid">
+      <!-- Left: Feature object -->
+      <section class="card">
+        <div class="pill">
+          <span class="dot"></span>
+          <span>Featured object</span>
+        </div>
+
+        <h2>The Butterfly Nebula (NGC 6302)</h2>
+        <p>
+          The Butterfly Nebula is one of the most dramatic and colorful nebulae ever captured.
+          It lives in the constellation <strong>Scorpius</strong> and is actually a
+          <strong>planetary nebula</strong>—a cloud of gas expelled by a dying star.
+        </p>
+        <p>
+          The “wings” are huge lobes of gas and dust stretching out for light-years, glowing
+          as the star’s intense radiation lights them up. If you could see it up close, you’d
+          be looking at the final, beautiful breaths of a once Sun-like star.
+        </p>
+
+        <div class="nebula-visual">
+          <div class="nebula-label">
+            <strong>Butterfly Nebula</strong><br />
+            Imagined glow of gas and dust
+          </div>
+        </div>
+
+        <p class="muted">
+          Planetary nebulae don’t come from planets—the name is a historical accident from
+          early telescope views.
+        </p>
+      </section>
+
+      <!-- Right: Why space & astronomy are awesome -->
+      <section class="card">
+        <div class="pill">
+          <span class="dot"></span>
+          <span>Why it’s awesome</span>
+        </div>
+
+        <h2>Why Space Feels So Endless</h2>
+        <p>
+          Space is a mix of silence and extremes: stars being born, galaxies colliding,
+          black holes bending light itself. Astronomy is our way of listening to all of that
+          from a tiny world orbiting an ordinary star.
+        </p>
+
+        <h3>Reasons to love space</h3>
+        <ul>
+          <li><strong>Scale:</strong> Distances are so huge we measure them in light-years—how far light travels in a year.</li>
+          <li><strong>Time travel:</strong> When you look at distant galaxies, you’re seeing them as they were millions or billions of years ago.</li>
+          <li><strong>Cosmic stories:</strong> Every star has a life cycle: birth in a nebula, long calm years, and a dramatic ending.</li>
+          <li><strong>Hidden light:</strong> Telescopes don’t just see visible light—they listen to radio waves, X-rays, and infrared to reveal invisible details.</li>
+        </ul>
+
+        <h3>How you can explore from home</h3>
+        <ul>
+          <li><strong>Stargazing:</strong> Step outside on a clear night, let your eyes adjust, and find a familiar constellation.</li>
+          <li><strong>Apps & maps:</strong> Use a sky map app to identify planets, bright stars, and upcoming meteor showers.</li>
+          <li><strong>Space images:</strong> Browse images from telescopes like Hubble and JWST—each one is a postcard from the universe.</li>
+        </ul>
+      </section>
+    </main>
+
+    <p class="footer-note">
+      The universe doesn’t need you to understand it to be beautiful—
+      <span>but you’re trying anyway, and that’s kind of amazing.</span>
+    </p>
+  </div>
+</body>
+</html>
