@@ -1,864 +1,344 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My First Space Page</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My First Space Page</title>
 
-<style>
+  <style>
+    :root {
+      --bg-1: #0a1a33;
+      --bg-2: #000000;
+      --accent: #c9a93b;
+      --text: #d9d9d9;
+      --text-bright: #f0f0f0;
+      --panel: rgba(20, 20, 30, 0.78);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
     body {
-        margin: 0;
-        padding: 0;
-        background: radial-gradient(circle at top, #001f3f, #000000);
-        color: #d9d9d9;
-        font-family: Arial, Helvetica, sans-serif;
-        line-height: 1.7;
+      margin: 0;
+      padding: 0;
     }
 
-    /* Star field effect */
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+      background:
+        radial-gradient(circle at 50% 20%, var(--bg-1), var(--bg-2) 60%),
+        radial-gradient(circle at 80% 80%, rgba(201, 169, 59, 0.2), transparent 70%),
+        radial-gradient(circle at 20% 70%, rgba(201, 169, 59, 0.12), transparent 70%);
+      background-blend-mode: screen;
+      min-height: 100vh;
+    }
+
+    /* Star field */
     body::before {
-        content: "";
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: transparent;
-        pointer-events: none;
-        z-index: 0;
-        box-shadow:
-            10vw 20vh 2px #c9a93b,
-            30vw 40vh 2px #c9a93b,
-            50vw 10vh 2px #c9a93b,
-            70vw 80vh 2px #c9a93b,
-            90vw 30vh 2px #c9a93b,
-            20vw 70vh 2px #c9a93b,
-            40vw 60vh 2px #c9a93b,
-            60vw 50vh 2px #c9a93b,
-            80vw 20vh 2px #c9a93b;
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      box-shadow:
+        5vw 10vh 2px rgba(201, 169, 59, 0.9),
+        15vw 30vh 2px rgba(201, 169, 59, 0.7),
+        25vw 70vh 2px rgba(201, 169, 59, 0.8),
+        35vw 50vh 2px rgba(201, 169, 59, 0.6),
+        45vw 20vh 2px rgba(201, 169, 59, 0.9),
+        55vw 80vh 2px rgba(201, 169, 59, 0.7),
+        65vw 40vh 2px rgba(201, 169, 59, 0.8),
+        75vw 60vh 2px rgba(201, 169, 59, 0.9),
+        85vw 25vh 2px rgba(201, 169, 59, 0.6),
+        95vw 75vh 2px rgba(201, 169, 59, 0.8);
     }
 
-    header {
-        text-align: center;
-        padding: 60px 20px;
-        position: relative;
-        z-index: 1;
-    }
-
-    header h1 {
-        font-size: 3.5rem;
-        color: #f0f0f0;
-        margin-bottom: 10px;
-        text-shadow: 0 0 10px #c9a93b;
-    }
-
-    header p {
-        font-size: 1.3rem;
-        color: #cccccc;
-    }
-
-    section {
-        max-width: 900px;
-        margin: 60px auto;
-        padding: 30px;
-        background: rgba(20, 20, 30, 0.7);
-        border-radius: 12px;
-        box-shadow: 0 0 20px rgba(201, 169, 59, 0.3);
-        position: relative;
-        z-index: 1;
-    }
-
-    section h2 {
-        font-size: 2.3rem;
-        margin-bottom: 20px;
-        color: #f0f0f0;
-        text-shadow: 0 0 6px #c9a93b;
-    }
-
-    section p {
-        font-size: 1.2rem;
-    }
-
-    img {
-        width: 100%;
-        border-radius: 10px;
-        margin-top: 20px;
-        box-shadow: 0 0 15px rgba(201, 169, 59, 0.4);
-    }
-</style>
-</head>
-
-<body>
-
-<header>
-    <h1>Welcome to My Space Page</h1>
-    <p>Exploring the universe one cool discovery at a time</p>
-</header>
-
-<section>
-    <h2>The Butterfly Nebula</h2>
-    <p>
-        The Butterfly Nebula (NGC 6302) is one of the most dramatic and colorful nebulae ever captured.
-        It’s located in the constellation Scorpius and is actually a **planetary nebula** — a cloud of gas
-        expelled by a dying star. The “wings” you see are huge lobes of gas and dust stretching out for
-        light‑years, glowing brightly as the star’s intense radiation lights them up.
-    </p>
-
-    <img src="https://www.nasa.gov/sites/default/files/styles/full_width_feature/public/thumbnails/image/potw2024a.jpg" 
-         alt="Butterfly Nebula">
-</section>
-
-<section>
-    <h2>Why Space Is Awesome</h2>
-    <p>
-        Space is full of mysteries — black holes, galaxies, nebulae, planets, and stars that are bigger
-        than anything we can imagine. Every time scientists point a telescope at the sky, they find
-        something new. And now you’re building your own webpage to share that excitement.
-    </p>
-</section>
-
-<section>
-    <h2>Keep Exploring</h2>
-    <p>
-        Whether you're learning about nebulae, planets, or the edge of the universe, space is a place
-        where curiosity always pays off. Keep exploring, keep asking questions, and keep looking up.
-    </p>
-</section>
-
-</body>
-</html>
-
-<!-- SPACE NAVIGATION BAR WITH ANIMATED GLOW LOGO -->
-<nav class="space-nav">
-    <div class="nav-logo">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/512px-NASA_logo.svg.png" 
-             alt="Space Logo" class="glow-logo">
-        <span>Space Explorer</span>
-    </div>
-
-    <ul class="nav-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#nebulae">Nebulae</a></li>
-        <li><a href="#planets">Planets</a></li>
-        <li><a href="#galaxies">Galaxies</a></li>
-        <li><a href="#about">About Space</a></li>
-    </ul>
-</nav>
-
-<style>
     .space-nav {
-        background: linear-gradient(to bottom, #001f3f, #000000);
-        padding: 15px 30px;
-        box-shadow: 0 0 15px rgba(201, 169, 59, 0.4);
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+      background: linear-gradient(to bottom, #001f3f, #000000);
+      padding: 14px 22px;
+      box-shadow: 0 0 15px rgba(201, 169, 59, 0.35);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .nav-logo {
-        display: flex;
-        align-items: center;
-        gap: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .nav-logo img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-    }
-
-    /* ⭐ Animated Glow Effect */
-    .glow-logo {
-        animation: starGlow 2.5s ease-in-out infinite;
-        box-shadow: 0 0 12px rgba(201, 169, 59, 0.7);
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      box-shadow: 0 0 12px rgba(201, 169, 59, 0.7);
+      animation: starGlow 2.5s ease-in-out infinite;
+      object-fit: cover;
+      background: #fff;
     }
 
     @keyframes starGlow {
-        0% {
-            box-shadow: 0 0 8px rgba(201, 169, 59, 0.4);
-        }
-        50% {
-            box-shadow: 0 0 22px rgba(201, 169, 59, 1);
-        }
-        100% {
-            box-shadow: 0 0 8px rgba(201, 169, 59, 0.4);
-        }
+      0% {
+        box-shadow: 0 0 8px rgba(201, 169, 59, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 22px rgba(201, 169, 59, 1);
+      }
+      100% {
+        box-shadow: 0 0 8px rgba(201, 169, 59, 0.4);
+      }
     }
 
     .nav-logo span {
-        font-size: 1.6rem;
-        font-weight: bold;
-        color: #f0f0f0;
-        text-shadow: 0 0 8px #c9a93b;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-bright);
+      text-shadow: 0 0 8px var(--accent);
     }
 
     .nav-links {
-        list-style: none;
-        display: flex;
-        gap: 35px;
-        margin: 0;
-        padding: 0;
+      list-style: none;
+      display: flex;
+      gap: 18px;
+      margin: 0;
+      padding: 0;
+      flex-wrap: wrap;
     }
 
     .nav-links a {
-        text-decoration: none;
-        color: #d9d9d9;
-        font-size: 1.2rem;
-        font-weight: bold;
-        text-shadow: 0 0 6px #c9a93b;
-        transition: color 0.3s ease, text-shadow 0.3s ease;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 700;
+      text-shadow: 0 0 6px var(--accent);
+      transition: color 0.25s ease, text-shadow 0.25s ease;
     }
 
     .nav-links a:hover {
-        color: #f0f0f0;
-        text-shadow: 0 0 12px #c9a93b;
+      color: var(--text-bright);
+      text-shadow: 0 0 12px var(--accent);
     }
-</style>
 
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #d9d9d9;
+    header,
+    section {
+      position: relative;
+      z-index: 1;
+    }
 
-    /* Cosmic gradient */
-    background: radial-gradient(circle at 50% 20%, #0a1a33, #000000 60%),
-                radial-gradient(circle at 80% 80%, rgba(201,169,59,0.25), transparent 70%),
-                radial-gradient(circle at 20% 70%, rgba(201,169,59,0.15), transparent 70%);
+    header {
+      text-align: center;
+      padding: 56px 20px 28px;
+    }
 
-    background-blend-mode: screen;
-    min-height: 100vh;
-}
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: var(--text-bright);
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px var(--accent);
+    }
 
-/* Optional star shimmer */
-body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
+    header p {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      margin: 0;
+    }
 
-    box-shadow:
-        10vw 20vh 2px rgba(201,169,59,0.9),
-        30vw 40vh 2px rgba(201,169,59,0.7),
-        50vw 10vh 2px rgba(201,169,59,0.8),
-        70vw 80vh 2px rgba(201,169,59,0.6),
-        90vw 30vh 2px rgba(201,169,59,0.9),
-        20vw 70vh 2px rgba(201,169,59,0.7),
-        40vw 60vh 2px rgba(201,169,59,0.8),
-        60vw 50vh 2px rgba(201,169,59,0.9),
-        80vw 20vh 2px rgba(201,169,59,0.6);
-}
+    section {
+      max-width: 920px;
+      margin: 24px auto 56px;
+      padding: 28px;
+      background: var(--panel);
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(201, 169, 59, 0.25);
+    }
 
-/* Cosmic gradient background + stars */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #d9d9d9;
+    h2 {
+      font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+      margin: 0 0 14px;
+      color: var(--text-bright);
+      text-shadow: 0 0 6px var(--accent);
+    }
 
-    background: radial-gradient(circle at 50% 20%, #0a1a33, #000000 60%),
-                radial-gradient(circle at 80% 80%, rgba(201,169,59,0.25), transparent 70%),
-                radial-gradient(circle at 20% 70%, rgba(201,169,59,0.15), transparent 70%);
-    background-blend-mode: screen;
+    h3 {
+      font-size: clamp(1.2rem, 2.6vw, 1.7rem);
+      margin: 30px 0 8px;
+      color: var(--text-bright);
+    }
 
-    min-height: 100vh;
-}
+    p {
+      font-size: 1.05rem;
+      margin-top: 8px;
+    }
 
-/* ⭐ Star field layer */
-body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
+    .space-img {
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 16px;
+      box-shadow: 0 0 15px rgba(201, 169, 59, 0.32);
+      display: block;
+      background: #101010;
+    }
 
-    box-shadow:
-        5vw 10vh 2px rgba(201,169,59,0.9),
-        15vw 30vh 2px rgba(201,169,59,0.7),
-        25vw 70vh 2px rgba(201,169,59,0.8),
-        35vw 50vh 2px rgba(201,169,59,0.6),
-        45vw 20vh 2px rgba(201,169,59,0.9),
-        55vw 80vh 2px rgba(201,169,59,0.7),
-        65vw 40vh 2px rgba(201,169,59,0.8),
-        75vw 60vh 2px rgba(201,169,59,0.9),
-        85vw 25vh 2px rgba(201,169,59,0.6),
-        95vw 75vh 2px rgba(201,169,59,0.8);
-}
+    .caption {
+      margin-top: 8px;
+      font-size: 1rem;
+    }
 
-<!-- ========================= -->
-<!--   PLANET SECTION START    -->
-<!-- ========================= -->
+    .small-note {
+      margin-top: 18px;
+      color: #bbbbbb;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <nav class="space-nav" id="home">
+    <div class="nav-logo">
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/512px-NASA_logo.svg.png"
+        alt="NASA logo"
+      />
+      <span>Space Explorer</span>
+    </div>
 
-<section id="planets" style="
-    max-width: 900px;
-    margin: 60px auto;
-    padding: 30px;
-    background: rgba(20,20,30,0.7);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(201,169,59,0.3);
-    color: #d9d9d9;
-    font-family: Arial, Helvetica, sans-serif;
-">
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#nebulae">Nebulae</a></li>
+      <li><a href="#planets">Planets</a></li>
+      <li><a href="#galaxies">Galaxies</a></li>
+      <li><a href="#apod">APOD</a></li>
+    </ul>
+  </nav>
 
-    <h2 style="font-size: 2.5rem; text-shadow: 0 0 8px #c9a93b; color: #f0f0f0;">
-        Types of Planets
-    </h2>
+  <header>
+    <h1>Welcome to My Space Page</h1>
+    <p>Exploring the universe one cool discovery at a time</p>
+  </header>
 
-    <!-- TERRESTRIAL PLANETS -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Terrestrial Planets</h3>
-    <p>Rocky planets with solid surfaces, mountains, craters, and sometimes atmospheres.</p>
-
-    <img src="https://solarsystem.nasa.gov/system/feature_items/images/18_mercury_new.png"
-         alt="Mercury" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Mercury</strong> — Small, crater‑covered, closest to the Sun.</p>
-
-    <img src="https://solarsystem.nasa.gov/system/feature_items/images/27_venus_jg.png"
-         alt="Venus" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Venus</strong> — Thick clouds, hottest planet in the solar system.</p>
-
-    <img src="https://solarsystem.nasa.gov/system/feature_items/images/17_earth.png"
-         alt="Earth" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Earth</strong> — Our home, full of life and water.</p>
-
-    <img src="https://solarsystem.nasa.gov/system/feature_items/images/19_mars.png"
-         alt="Mars" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Mars</strong> — Red dust, giant volcanoes, possible ancient water.</p>
-
-
-    <!-- GAS GIANTS -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Gas Giants</h3>
-    <p>Huge planets made of gas with massive storms and thick atmospheres.</p>
-
-    <img src="https://solarsystem.nasa.gov/system/feature_items/images/16_jupiter_new.png"
-         alt="Jupiter" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Jupiter</strong> — Largest planet, home to the Great Red Spot storm.</p>
-
-    <img src="https://solarsystem.nasa.gov/system/feature_items/images/28_saturn.png"
-         alt="Saturn" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Saturn</strong> — Famous for its bright, icy rings.</p>
-
-
-    <!-- ICE GIANTS -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Ice Giants</h3>
-    <p>Cold planets filled with icy materials like methane and ammonia.</p>
-
-    <img src="https://solarsystem.nasa.gov/system/feature_items/images/29_uranus.png"
-         alt="Uranus" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Uranus</strong> — Spins sideways like a rolling ball.</p>
-
-    <img src="https://solarsystem.nasa.gov/system/feature_items/images/30_neptune.png"
-         alt="Neptune" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Neptune</strong> — Fastest winds in the solar system.</p>
-
-
-    <!-- LAVA WORLDS -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Lava Worlds</h3>
-    <p>Extreme exoplanets so close to their stars that their surfaces melt.</p>
-
-    <img src="https://exoplanets.nasa.gov/internal_resources/503"
-         alt="55 Cancri e" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>55 Cancri e</strong> — Surface hot enough to vaporize rock.</p>
-
-    <img src="https://exoplanets.nasa.gov/internal_resources/504"
-         alt="K2-141b" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>K2‑141b</strong> — Has a “rock vapor” atmosphere.</p>
-
-
-    <!-- SUPER-EARTHS -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Super‑Earths</h3>
-    <p>Rocky planets larger than Earth, possibly habitable.</p>
-
-    <img src="https://exoplanets.nasa.gov/internal_resources/503"
-         alt="Kepler-452b" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Kepler‑452b</strong> — Sometimes called “Earth’s cousin.”</p>
-
-
-    <!-- ROGUE PLANETS -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Rogue Planets</h3>
-    <p>Planets drifting alone through space without a star.</p>
-
-    <img src="https://exoplanets.nasa.gov/internal_resources/505"
-         alt="Rogue Planet" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Rogue Planets</strong> — Cold, dark, mysterious wanderers.</p>
-
-</section>
-
-<!-- ========================= -->
-<!--    PLANET SECTION END     -->
-<!-- ========================= -->
-
-
-<!-- ========================= -->
-<!--   GALAXY SECTION START    -->
-<!-- ========================= -->
-
-<section id="galaxies" style="
-    max-width: 900px;
-    margin: 60px auto;
-    padding: 30px;
-    background: rgba(20,20,30,0.7);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(201,169,59,0.3);
-    color: #d9d9d9;
-    font-family: Arial, Helvetica, sans-serif;
-">
-
-    <h2 style="font-size: 2.5rem; text-shadow: 0 0 8px #c9a93b; color: #f0f0f0;">
-        Galaxies of the Universe
-    </h2>
+  <section>
+    <h2>The Butterfly Nebula</h2>
     <p>
-        Galaxies are huge collections of stars, gas, dust, and dark matter. 
-        They come in different shapes and sizes, each with its own story.
+      The Butterfly Nebula (NGC 6302) is one of the most dramatic nebulae ever
+      captured. It is a planetary nebula in Scorpius: glowing gas thrown off by a
+      dying star.
     </p>
+    <img
+      class="space-img"
+      src="https://upload.wikimedia.org/wikipedia/commons/6/65/Butterfly_Nebula_%28NGC_6302%29.png"
+      alt="Butterfly Nebula NGC 6302"
+      loading="lazy"
+    />
+  </section>
 
-    <!-- SPIRAL GALAXIES -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Spiral Galaxies</h3>
+  <section id="nebulae">
+    <h2>Nebulae of the Cosmos</h2>
+
+    <h3>Orion Nebula</h3>
+    <img
+      class="space-img"
+      src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg"
+      alt="Orion Nebula"
+      loading="lazy"
+    />
+
+    <h3>Ring Nebula (M57)</h3>
+    <img
+      class="space-img"
+      src="https://upload.wikimedia.org/wikipedia/commons/8/85/Ring_Nebula%2C_Messier_57.jpg"
+      alt="Ring Nebula"
+      loading="lazy"
+    />
+
+    <h3>Crab Nebula</h3>
+    <img
+      class="space-img"
+      src="https://upload.wikimedia.org/wikipedia/commons/0/00/Crab_Nebula.jpg"
+      alt="Crab Nebula"
+      loading="lazy"
+    />
+  </section>
+
+  <section id="planets">
+    <h2>Types of Planets</h2>
+
+    <h3>Terrestrial Planets</h3>
+    <p>Rocky worlds with solid surfaces.</p>
+    <img class="space-img" src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Mercury_in_true_color.jpg" alt="Mercury" loading="lazy" />
+    <p class="caption"><strong>Mercury</strong> — Small and crater-covered.</p>
+
+    <img class="space-img" src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg" alt="Venus" loading="lazy" />
+    <p class="caption"><strong>Venus</strong> — Thick atmosphere and extreme heat.</p>
+
+    <img class="space-img" src="https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg" alt="Earth" loading="lazy" />
+    <p class="caption"><strong>Earth</strong> — Our home world.</p>
+
+    <img class="space-img" src="https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg" alt="Mars" loading="lazy" />
+    <p class="caption"><strong>Mars</strong> — The Red Planet.</p>
+
+    <h3>Gas Giants</h3>
+    <img class="space-img" src="https://upload.wikimedia.org/wikipedia/commons/e/e2/Jupiter.jpg" alt="Jupiter" loading="lazy" />
+    <p class="caption"><strong>Jupiter</strong> — Largest planet in our solar system.</p>
+
+    <img class="space-img" src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg" alt="Saturn" loading="lazy" />
+    <p class="caption"><strong>Saturn</strong> — Famous for its rings.</p>
+
+    <h3>Ice Giants</h3>
+    <img class="space-img" src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Uranus2.jpg" alt="Uranus" loading="lazy" />
+    <p class="caption"><strong>Uranus</strong> — Rotates on its side.</p>
+
+    <img class="space-img" src="https://upload.wikimedia.org/wikipedia/commons/5/56/Neptune_Full.jpg" alt="Neptune" loading="lazy" />
+    <p class="caption"><strong>Neptune</strong> — Strongest winds in the solar system.</p>
+  </section>
+
+  <section id="galaxies">
+    <h2>Galaxies of the Universe</h2>
+
+    <h3>Spiral Galaxy (NGC 1300)</h3>
+    <img
+      class="space-img"
+      src="https://upload.wikimedia.org/wikipedia/commons/7/70/NGC_1300.jpg"
+      alt="Spiral galaxy NGC 1300"
+      loading="lazy"
+    />
+
+    <h3>Elliptical Galaxy (M87)</h3>
+    <img
+      class="space-img"
+      src="https://upload.wikimedia.org/wikipedia/commons/1/10/Messier_87_HST.jpg"
+      alt="Elliptical galaxy M87"
+      loading="lazy"
+    />
+
+    <h3>Colliding Galaxies (Antennae)</h3>
+    <img
+      class="space-img"
+      src="https://upload.wikimedia.org/wikipedia/commons/0/0d/The_Antennae_Galaxies_reloaded.jpg"
+      alt="Antennae colliding galaxies"
+      loading="lazy"
+    />
+  </section>
+
+  <section id="apod">
+    <h2>Astronomy Picture of the Day</h2>
     <p>
-        Spiral galaxies have bright centers and arms that swirl outward, 
-        filled with stars, gas, and dust.
+      Visit NASA APOD for today’s featured image:
+      <a href="https://apod.nasa.gov/apod/astropix.html" target="_blank" rel="noopener noreferrer">apod.nasa.gov</a>
     </p>
-
-    <img src="https://www.nasa.gov/sites/default/files/styles/full_width_feature/public/thumbnails/image/potw2024a.jpg"
-         alt="Spiral Galaxy" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p>
-        <strong>Example:</strong> The Milky Way (our galaxy) and the Andromeda Galaxy 
-        are both spiral galaxies with sweeping arms.
+    <p class="small-note">
+      Tip: If you want this section to auto-update daily, I can add JavaScript using NASA’s APOD API.
     </p>
-
-    <!-- ELLIPTICAL GALAXIES -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Elliptical Galaxies</h3>
-    <p>
-        Elliptical galaxies look like smooth, rounded clouds of stars. 
-        They don’t have clear arms and often contain older stars.
-    </p>
-
-    <img src="https://www.nasa.gov/sites/default/files/styles/full_width_feature/public/thumbnails/image/potw1905a.jpg"
-         alt="Elliptical Galaxy" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p>
-        <strong>Example:</strong> Giant elliptical galaxies can be found at the centers 
-        of galaxy clusters, holding trillions of stars.
-    </p>
-
-    <!-- IRREGULAR GALAXIES -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Irregular Galaxies</h3>
-    <p>
-        Irregular galaxies don’t fit a neat shape. They can look messy or distorted, 
-        often because of past collisions or strong gravity from nearby galaxies.
-    </p>
-
-    <img src="https://www.nasa.gov/sites/default/files/styles/full_width_feature/public/thumbnails/image/potw2023a.jpg"
-         alt="Irregular Galaxy" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p>
-        <strong>Example:</strong> The Large Magellanic Cloud is an irregular galaxy 
-        near the Milky Way, full of star‑forming regions.
-    </p>
-
-    <!-- COLLIDING / INTERACTING GALAXIES -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Colliding Galaxies</h3>
-    <p>
-        Sometimes galaxies crash into each other or pass very close. 
-        Their shapes get twisted, and new stars can be born from the chaos.
-    </p>
-
-    <img src="https://www.nasa.gov/sites/default/files/styles/full_width_feature/public/thumbnails/image/potw1345a.jpg"
-         alt="Colliding Galaxies" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p>
-        <strong>Example:</strong> The Antennae Galaxies are two galaxies in the middle 
-        of a dramatic collision, creating bright star‑forming regions.
-    </p>
-
-</section>
-
-<!-- ========================= -->
-<!--    GALAXY SECTION END     -->
-<!-- ========================= -->
-
-<!-- ========================= -->
-<!--   GALAXY SECTION START    -->
-<!-- ========================= -->
-
-<section id="galaxies" style="
-    max-width: 900px;
-    margin: 60px auto;
-    padding: 30px;
-    background: rgba(20,20,30,0.7);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(201,169,59,0.3);
-    color: #d9d9d9;
-    font-family: Arial, Helvetica, sans-serif;
-">
-
-    <h2 style="font-size: 2.5rem; text-shadow: 0 0 8px #c9a93b; color: #f0f0f0;">
-        Galaxies of the Universe
-    </h2>
-    <p>
-        Galaxies are enormous islands of stars, gas, dust, and dark matter. 
-        They come in many shapes — spirals, ellipses, chaotic clouds, and even colliding pairs.
-        Here are some of the most fascinating types, each with a real NASA public‑domain image.
-    </p>
-
-    <!-- SPIRAL GALAXIES -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Spiral Galaxies</h3>
-    <p>
-        Spiral galaxies have bright centers and swirling arms full of stars and nebulae.
-    </p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/hubble_ngc1300.jpg"
-         alt="Spiral Galaxy NGC 1300" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>NGC 1300</strong> — A stunning barred spiral galaxy with long, sweeping arms.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/potw2024a.jpg"
-         alt="Butterfly Galaxy" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Butterfly Galaxy</strong> — A dramatic spiral galaxy with bright star‑forming regions.</p>
-
-    <!-- ELLIPTICAL GALAXIES -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Elliptical Galaxies</h3>
-    <p>
-        Elliptical galaxies look like smooth, rounded clouds of stars. 
-        They often contain older stars and little gas.
-    </p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/hubble_m87.jpg"
-         alt="Elliptical Galaxy M87" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>M87</strong> — A giant elliptical galaxy with a supermassive black hole at its center.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/potw1905a.jpg"
-         alt="Elliptical Galaxy" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>NGC 4621</strong> — A smooth, bright elliptical galaxy filled with ancient stars.</p>
-
-    <!-- IRREGULAR GALAXIES -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Irregular Galaxies</h3>
-    <p>
-        Irregular galaxies have no defined shape. They often look chaotic due to past collisions.
-    </p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/hubble_lmc.jpg"
-         alt="Large Magellanic Cloud" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Large Magellanic Cloud</strong> — A nearby irregular galaxy full of star‑forming regions.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/potw2023a.jpg"
-         alt="Irregular Galaxy" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>NGC 4485</strong> — A distorted galaxy shaped by gravitational interactions.</p>
-
-    <!-- COLLIDING GALAXIES -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Colliding Galaxies</h3>
-    <p>
-        When galaxies collide, their shapes twist and new stars are born in huge bursts.
-    </p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/hubble_antennae.jpg"
-         alt="Antennae Galaxies" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Antennae Galaxies</strong> — Two galaxies in a dramatic collision, creating bright star clusters.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/potw1345a.jpg"
-         alt="Colliding Galaxies" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>NGC 2623</strong> — A late‑stage galaxy merger forming a single distorted galaxy.</p>
-
-    <!-- STARBURST GALAXIES -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Starburst Galaxies</h3>
-    <p>
-        These galaxies are undergoing intense star formation, creating thousands of new stars.
-    </p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/hubble_m82.jpg"
-         alt="Starburst Galaxy M82" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>M82 (Cigar Galaxy)</strong> — A starburst galaxy blasting out bright red gas jets.</p>
-
-</section>
-
-<!-- ========================= -->
-<!--    GALAXY SECTION END     -->
-<!-- ========================= -->
-
-<!-- ========================= -->
-<!--    NEBULA SECTION START   -->
-<!-- ========================= -->
-
-<section id="nebulae" style="
-    max-width: 900px;
-    margin: 60px auto;
-    padding: 30px;
-    background: rgba(20,20,30,0.7);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(201,169,59,0.3);
-    color: #d9d9d9;
-    font-family: Arial, Helvetica, sans-serif;
-">
-
-    <h2 style="font-size: 2.5rem; text-shadow: 0 0 8px #c9a93b; color: #f0f0f0;">
-        Nebulae of the Cosmos
-    </h2>
-    <p>
-        Nebulae are giant clouds of gas and dust floating in space. 
-        They can be star nurseries, glowing clouds, or the remains of dying stars. 
-        Their colors and shapes make them some of the most beautiful objects in the universe.
-    </p>
-
-    <!-- EMISSION NEBULA -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Emission Nebula</h3>
-    <p>
-        These nebulae glow brightly because nearby young stars energize the gas.
-    </p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/potw2024a.jpg"
-         alt="Butterfly Nebula" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Butterfly Nebula (NGC 6302)</strong> — A dramatic, wing‑shaped nebula created by a dying star.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/orion_nebula.jpg"
-         alt="Orion Nebula" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Orion Nebula</strong> — A massive star‑forming region visible even with small telescopes.</p>
-
-    <!-- REFLECTION NEBULA -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Reflection Nebula</h3>
-    <p>
-        These nebulae don’t glow on their own — they reflect the light of nearby stars.
-    </p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/hubble_ngc7023.jpg"
-         alt="Iris Nebula" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Iris Nebula (NGC 7023)</strong> — A blue reflection nebula lit by a young star.</p>
-
-    <!-- PLANETARY NEBULA -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Planetary Nebula</h3>
-    <p>
-        These nebulae form when dying stars shed their outer layers, creating glowing shells.
-    </p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/hubble_ring_nebula.jpg"
-         alt="Ring Nebula" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Ring Nebula (M57)</strong> — A colorful ring created by a star in its final stages.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/hubble_catseye.jpg"
-         alt="Cat's Eye Nebula" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Cat’s Eye Nebula</strong> — One of the most complex planetary nebulae ever observed.</p>
-
-    <!-- DARK NEBULA -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Dark Nebula</h3>
-    <p>
-        These nebulae are so thick with dust that they block the light behind them.
-    </p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/hubble_barnard68.jpg"
-         alt="Barnard 68" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Barnard 68</strong> — A dark cloud that hides stars behind it completely.</p>
-
-</section>
-
-<!-- ========================= -->
-<!--     NEBULA SECTION END    -->
-<!-- ========================= -->
-
-<!-- =============================== -->
-<!--      COSMIC TIMELINE SECTION    -->
-<!-- =============================== -->
-
-<section id="cosmic-timeline" style="
-    max-width: 900px;
-    margin: 60px auto;
-    padding: 30px;
-    background: rgba(20,20,30,0.7);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(201,169,59,0.3);
-    color: #d9d9d9;
-    font-family: Arial, Helvetica, sans-serif;
-">
-
-    <h2 style="font-size: 2.5rem; text-shadow: 0 0 8px #c9a93b; color: #f0f0f0;">
-        Cosmic Timeline of the Universe
-    </h2>
-    <p>
-        The universe has been evolving for over 13.8 billion years. 
-        Here’s a bold, easy‑to‑follow timeline showing how everything came to be.
-    </p>
-
-    <!-- 1. BIG BANG -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">13.8 Billion Years Ago — The Big Bang</h3>
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/cmb_map.jpg"
-<!-- =============================== -->
-<!--   ASTRONOMY PICTURE OF THE DAY  -->
-<!-- =============================== -->
-
-<section id="apod" style="
-    max-width: 900px;
-    margin: 60px auto;
-    padding: 30px;
-    background: rgba(20,20,30,0.7);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(201,169,59,0.3);
-    color: #d9d9d9;
-    font-family: Arial, Helvetica, sans-serif;
-">
-
-    <h2 style="font-size: 2.5rem; text-shadow: 0 0 8px #c9a93b; color: #f0f0f0;">
-        Astronomy Picture of the Day
-    </h2>
-    <p>
-        Updated daily with NASA’s Astronomy Picture of the Day (APOD).  
-        Visit <strong>apod.nasa.gov</strong> and paste the newest image link below.
-    </p>
-
-    <!-- Replace the image URL below with today's APOD image -->
-    <img src="https://apod.nasa.gov/apod/image/2401/HelixNebula_Hubble_960.jpg"
-         alt="Astronomy Picture of the Day"
-         style="width:100%; border-radius:10px; margin-top:20px; box-shadow:0 0 15px rgba(201,169,59,0.4);">
-
-    <!-- Replace this text with APOD's daily description -->
-    <p style="margin-top:15px; font-size:1.2rem;">
-        <strong>Example:</strong> The Helix Nebula is a planetary nebula located about 700 light‑years away. 
-        Its glowing gas clouds were expelled by a dying star, creating this iconic “eye of space.”
-    </p>
-
-    <p style="margin-top:20px; font-size:1rem; color:#bbbbbb;">
-        Source: NASA APOD — apod.nasa.gov
-    </p>
-
-</section>
-
-<!-- =============================== -->
-<!--        APOD SECTION END         -->
-<!-- =============================== -->
-
-<!-- =============================== -->
-<!--   ASTRONOMY PICTURE OF THE DAY  -->
-<!-- =============================== -->
-
-<section id="apod" style="
-    max-width: 900px;
-    margin: 60px auto;
-    padding: 30px;
-    background: rgba(20,20,30,0.7);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(201,169,59,0.3);
-    color: #d9d9d9;
-    font-family: Arial, Helvetica, sans-serif;
-">
-    <h2 style="font-size: 2.5rem; text-shadow: 0 0 8px #c9a93b; color: #f0f0f0;">
-        Astronomy Picture of the Day
-    </h2>
-
-    <p id="apod-date" style="font-size:1.1rem; color:#bbbbbb;"></p>
-
-    <img id="apod-image" 
-         src="" 
-         alt="Astronomy Picture of the Day"
-         style="width:100%; border-radius:10px; margin-top:20px; box-shadow:0 0 15px rgba(201,169,59,0.4); display:none;">
-
-    <iframe id="apod-video" 
-            style="width:100%; height:400px; border-radius:10px; margin-top:20px; display:none;">
-    </iframe>
-
-    <h3 id="apod-title" style="font-size:2rem; margin-top:20px; color:#f0f0f0;"></h3>
-
-    <p id="apod-desc" style="margin-top:15px; font-size:1.2rem;"></p>
-</section>
-
-<!-- =============================== -->
-<!--        APOD SCRIPT              -->
-<!-- =============================== -->
-
-<script>
-    const
-
-<!-- ========================= -->
-<!--    NEBULA SECTION START   -->
-<!-- ========================= -->
-
-<section id="nebulae" style="
-    max-width: 900px;
-    margin: 60px auto;
-    padding: 30px;
-    background: rgba(20,20,30,0.7);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(201,169,59,0.3);
-    color: #d9d9d9;
-    font-family: Arial, Helvetica, sans-serif;
-">
-
-    <h2 style="font-size: 2.5rem; text-shadow: 0 0 8px #c9a93b; color: #f0f0f0;">
-        Nebulae of the Cosmos
-    </h2>
-    <p>
-        Nebulae are giant clouds of gas and dust. Some glow, some reflect starlight,
-        some block it, and some are the remains of exploding stars.
-    </p>
-
-    <!-- EMISSION NEBULAE -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Emission Nebulae</h3>
-    <p>These nebulae glow because nearby young stars energize the gas.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/orion_nebula.jpg"
-         alt="Orion Nebula" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Orion Nebula</strong> — A bright star‑forming region visible even with small telescopes.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/lagoon_nebula.jpg"
-         alt="Lagoon Nebula" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Lagoon Nebula</strong> — Huge glowing clouds lit by newborn stars.</p>
-
-    <!-- REFLECTION NEBULAE -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Reflection Nebulae</h3>
-    <p>These nebulae reflect the light of nearby stars instead of glowing on their own.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/hubble_ngc7023.jpg"
-         alt="Iris Nebula" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Iris Nebula (NGC 7023)</strong> — A blue reflection nebula lit by a young star.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/pleiades_nebula.jpg"
-         alt="Pleiades Nebula" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Pleiades Nebula</strong> — Dust clouds reflecting the light of the famous Seven Sisters.</p>
-
-    <!-- PLANETARY NEBULAE -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Planetary Nebulae</h3>
-    <p>Shells of gas blown off by dying stars, forming colorful rings and bubbles.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/hubble_ring_nebula.jpg"
-         alt="Ring Nebula" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Ring Nebula (M57)</strong> — A glowing ring created by a star in its final stages.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/hubble_catseye.jpg"
-         alt="Cat's Eye Nebula" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Cat’s Eye Nebula</strong> — One of the most complex planetary nebulae ever observed.</p>
-
-    <!-- DARK NEBULAE -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Dark Nebulae</h3>
-    <p>Dense clouds of dust that block the light of stars behind them.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/hubble_barnard68.jpg"
-         alt="Barnard 68" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Barnard 68</strong> — A pitch‑black cloud that completely hides background stars.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/horsehead_nebula.jpg"
-         alt="Horsehead Nebula" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Horsehead Nebula</strong> — An iconic dark silhouette in the constellation Orion.</p>
-
-    <!-- SUPERNOVA REMNANTS -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Supernova Remnants</h3>
-    <p>Nebulae formed from the explosive death of massive stars.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/crab_nebula.jpg"
-         alt="Crab Nebula" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Crab Nebula</strong> — The remains of a supernova recorded in 1054.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/veil_nebula.jpg"
-         alt="Veil Nebula" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Veil Nebula</strong> — An expanding shockwave of a stellar explosion.</p>
-
-    <!-- BIPOLAR / STAR-FORMING NEBULAE -->
-    <h3 style="font-size: 2rem; margin-top: 40px; color: #f0f0f0;">Bipolar & Star‑Forming Nebulae</h3>
-    <p>Nebulae with twin lobes or towering structures where new stars are born.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/pillars_of_creation.jpg"
-         alt="Pillars of Creation" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Pillars of Creation</strong> — Towering columns of gas in the Eagle Nebula, rich with newborn stars.</p>
-
-    <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/butterfly_nebula.jpg"
-         alt="Butterfly Nebula" style="width:100%; border-radius:10px; margin-top:20px;">
-    <p><strong>Butterfly Nebula (NGC 6302)</strong> — Wing‑shaped lobes of gas from a dying star.</p>
-
-</section>
-
-<!-- ========================= -->
-<!--     NEBULA SECTION END    -->
-<!-- ========================= -->
-
+  </section>
+</body>
+</html>
