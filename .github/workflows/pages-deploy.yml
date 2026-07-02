@@ -47,4 +47,4 @@ jobs:
         with:
           # Pages deployments can remain queued
           # for over 10 minutes during busy periods.
-          timeout: 1800000
+          timeout: 1800000  # 30 minutes (milliseconds)
